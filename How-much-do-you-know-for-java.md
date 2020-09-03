@@ -226,7 +226,7 @@ public @interface CherryAnnotation {
 
 ### 1.10 值传递和引用传递
 
-> 参考 : https://juejin.im/post/6844903696996941832#comment
+> 参考文章 : https://juejin.im/post/6844903696996941832#comment
 
 **结论**
 
@@ -279,7 +279,7 @@ public @interface CherryAnnotation {
 
 #### 2.1.2 HashMap为什么是2的n次幂-----
 
-> 参考 : 
+> 参考文章 : 
 
 ### 2.2 ConcurrentHashMap
 
@@ -1050,7 +1050,7 @@ static boolean initFlag = false;
 
 ### 3.9 线程池----------------------
 
-> **参考 :** https://juejin.im/post/6844903889678893063#heading-34
+> **参考文章 :** https://juejin.im/post/6844903889678893063#heading-34
 
 > 面试问题1：Java的线程池说一下，各个参数的作用，如何进行的?
 >
@@ -1093,7 +1093,7 @@ static boolean initFlag = false;
 
 ### 3.12 Java锁
 
->  参考：https://mp.weixin.qq.com/s/XpZW52WoBnS3IJnwlDhEuQ作者：搜云库技术团队
+>  参考文章：https://mp.weixin.qq.com/s/XpZW52WoBnS3IJnwlDhEuQ作者：搜云库技术团队
 
 在读很多并发文章中，会提及各种各样锁如公平锁，乐观锁等等，这篇文章介绍各种锁的分类。介绍的内容如下：
 
@@ -1786,7 +1786,7 @@ public final int getAndAddInt(Object var1, long var2, int var4) {
 
 #### 3.15.2 AQS : 抽象队列同步器( AbstractQueuedSynchronizer ) -------------------- 
 
-> 参考 : https://juejin.im/post/6844903903188746247#heading-0
+> 参考文章 : https://juejin.im/post/6844903903188746247#heading-0
 
 **概念**
 
@@ -2355,7 +2355,7 @@ class Rectangle {
 
 ### 6.4 @requestbody和@responsebody
 
-> 参考 : https://www.cnblogs.com/daimajun/p/7152970.html  
+> 参考文章 : https://www.cnblogs.com/daimajun/p/7152970.html  
 
 #### 6.4.1 @ResponseBody
 
@@ -2363,7 +2363,7 @@ class Rectangle {
 
 #### 6.4.2    @RequestBody 
 
-> 参考 : https://blog.csdn.net/qq_36090463/article/details/80990938
+> 参考文章 : https://blog.csdn.net/qq_36090463/article/details/80990938
 >
 > ```txt
 > //官方文档
@@ -2393,7 +2393,7 @@ class Rectangle {
 
 #### 6.6.1 spring事务的传播性
 
-> 参考 : https://my.oschina.net/u/4030990/blog/3118266?_from=gitee_rec
+> 参考文章 : https://my.oschina.net/u/4030990/blog/3118266?_from=gitee_rec
 
 这里需要重新认识一下`Transactional`这个注解 : 
 
@@ -2462,7 +2462,7 @@ class Rectangle {
 
 ### 7.2 索引
 
-> https://juejin.im/post/6844903645125820424#heading-1
+> 参考文章 : https://juejin.im/post/6844903645125820424#heading-1
 
 #### 7.2.1 索引概念
 
@@ -2532,7 +2532,7 @@ class Rectangle {
 
 #### 7.2.3 MySQL索引分类
 
-> 参考 : https://juejin.im/post/6844904083397017614#heading-3
+> 参考文章 : https://juejin.im/post/6844904083397017614#heading-3
 
 ![](img/170b3016911f3168)
 
@@ -2710,7 +2710,7 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 
 > 原理图 : https://www.processon.com/view/5d29999ee4b07917e2e09294
 >
-> 参考 : https://blog.csdn.net/SnailMann/article/details/94724197
+> 参考文章 : https://blog.csdn.net/SnailMann/article/details/94724197
 >
 > 实现 : CAS + 版本号
 
@@ -2736,11 +2736,11 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 
 朋友当时提出是否出现了死锁, 但是我内心的答案是否定的, 因为死锁造成的是一种僵持状态, 朋友所说的是`insert`速度慢, 但是会成功
 
-> > 参考 : https://juejin.im/post/6867182249876389895#heading-16
+> > 参考文章 : https://juejin.im/post/6867182249876389895#heading-16
 >
 > - `MySQL`有哪些锁 ?
 >
->   > 参考 : [innodb的锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locking.html)
+>   > 参考文章 : [innodb的锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locking.html)
 >   >
 >   > 下面列举了其中三种锁
 >
@@ -2750,7 +2750,7 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 >
 > - `CRUD`会加什么锁 ?
 >
->   > 参考 : [查看innodb何种情况下使用何种锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locks-set.html)
+>   > 参考文章 : [查看innodb何种情况下使用何种锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locks-set.html)
 >
 >   > ```txt
 >   > SELECT ... FROM is a consistent read, reading a snapshot of the database and setting no locks unless the transaction isolation level is set to SERIALIZABLE. For SERIALIZABLE level, the search sets shared next-key locks on the index records it encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
@@ -2782,12 +2782,12 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 >
 > - `MySQL`的死锁是什么样子 ? 
 >
->   > 参考 : [InnoDB中的死锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-deadlocks.html)
+>   > 参考文章 : [InnoDB中的死锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-deadlocks.html)
 
 
 ### 7.5 左连接、右连接、内连接
 
-> 参考 : https://blog.csdn.net/weixin_42394615/article/details/82595620 
+> 参考文章 : https://blog.csdn.net/weixin_42394615/article/details/82595620 
 
 > **左连接：**` SELECT * FROM `A` LEFT JOIN B  ON ano=bno; ` 是以左表为基础，根据ON后给出的两表的条件将两表连接起来。结果会将左表所有的查询信息列出，而右表只列出ON后条件与左表满足的部分。 
 
@@ -2864,7 +2864,7 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 
 ### 7.7 SQL优化--------------------
 
-> 参考 : [干货！SQL性能优化，书写高质量SQL语句](https://juejin.im/post/6844903573935882247)    [干货！SQL性能优化，书写高质量SQL语句（二）](https://juejin.im/post/6844904048533962760)
+> 参考文章 : [干货！SQL性能优化，书写高质量SQL语句](https://juejin.im/post/6844903573935882247)    [干货！SQL性能优化，书写高质量SQL语句（二）](https://juejin.im/post/6844904048533962760)
 
 **问题 : **性能低 \ 执行时间长 \ 等待时间长 \ SQL语句欠佳( 多表查询 ) \ 索引失效 \ 服务器参数设置不合理 ( 缓冲区&线程数 )
 
@@ -2922,7 +2922,7 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 
 #### 大数据量的插入
 
-> 参考 : https://juejin.im/post/6844904118939549703
+> 参考文章 : https://juejin.im/post/6844904118939549703
 
 #### 其他
 
@@ -2932,7 +2932,7 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 
 #### 优化实例 -- 千万级单表
 
-> 参考 : https://www.cnblogs.com/panfb/p/8039796.html
+> 参考文章 : https://www.cnblogs.com/panfb/p/8039796.html
 
 ##### 1. 建表
 
@@ -3154,7 +3154,7 @@ Redis默认每隔100ms随机抽取一些设置了过期时间的key，检查是�
 
 #### 8.4.2 内存淘汰机制
 
-> 参考： https://stor.51cto.com/art/201904/594773.htm 
+> 参考文章： https://stor.51cto.com/art/201904/594773.htm 
 
 **当前Redis3.0版本支持的淘汰策略有6种：**
 
@@ -3202,7 +3202,7 @@ Redis默认每隔100ms随机抽取一些设置了过期时间的key，检查是�
 
 ### 8.7 redis的主从复制(Redis Slave) -> 哨兵模式(Redis Sentinel)
 
-> 参考 : [redis系列：主从复制](https://juejin.im/post/6844903650175746056)
+> 参考文章 : [redis系列：主从复制](https://juejin.im/post/6844903650175746056)
 
 **主从复制的流程**
 
@@ -3214,7 +3214,7 @@ Redis默认每隔100ms随机抽取一些设置了过期时间的key，检查是�
 
 **哨兵模式的流程**
 
-> 参考 : [Redis哨兵模式与高可用集群](https://juejin.im/post/6844903663362637832)
+> 参考文章 : [Redis哨兵模式与高可用集群](https://juejin.im/post/6844903663362637832)
 
 ### 8.8 redis应用
 
@@ -3456,7 +3456,7 @@ null
 
 ##### 9.6.2 可达性分析
 
-> 参考 : https://juejin.im/post/6844903974391250957
+> 参考文章 : https://juejin.im/post/6844903974391250957
 
 ###### 示例 : 判断对象是否可以回收
 
@@ -3787,7 +3787,7 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 
 ### 9.9 JVM参数调优
 
->参考 : https://www.cnblogs.com/andy-zhou/p/5327288.html#_caption_14
+>参考文章 : https://www.cnblogs.com/andy-zhou/p/5327288.html#_caption_14
 >
 >堆设置
 >-Xms:初始堆大小
@@ -4131,7 +4131,7 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 
 ### 分布式事务
 
-> 参考 ; https://juejin.im/post/6844903734753886216
+> 参考文章 ; https://juejin.im/post/6844903734753886216
 
 ### 分布式限流
 
@@ -4485,7 +4485,7 @@ public class ShellSort {
 
 #### 13.2.5 <font color="red">堆排序</font>
 
-> 参考 : https://www.bilibili.com/video/BV1Eb41147dK?from=search&seid=16802593733448062271
+> 参考文章 : https://www.bilibili.com/video/BV1Eb41147dK?from=search&seid=16802593733448062271
 
 > **什么是堆 ?**
 >
@@ -4872,7 +4872,7 @@ public class QuickSort {
 
 #### 15.1 设计原则
 
-> 参考 : https://juejin.im/post/6844903885253902343#heading-0
+> 参考文章 : https://juejin.im/post/6844903885253902343#heading-0
 
 - 依赖倒置原则（**D**ependence **I**nversion **P**rinciple，**DIP**）
 - 合成复用原则（**C**omposite **R**euse **P**rinciple，**CRP**）
