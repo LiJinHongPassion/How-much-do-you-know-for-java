@@ -2106,7 +2106,7 @@ class Rectangle {
 <div STYLE="page-break-after: always;"></div>
 ## 4.计算机网络
 
-![](img/1634e5e73955739d)
+![](img/16c47ba8756beeb3)
 
 ### 4.1 网络层
 
@@ -4881,19 +4881,40 @@ public class QuickSort {
 #### JDBC连接池源码
 
 ## <font color="red">17 网络编程</font>------
-### 17.1 IO----
 
+### 17.1 socket
+
+> **什么是socket ? **
+>
+> socket是网络编程接口, tcp/udp是网络协议;
+> 通过socket的接口来实现两台机器之间的通信;
+> 通信内容要满足tcp/udp协议;
+>
+> **和websocket区分开来, websocket是应用层协议, 例如HTTP; 而socket是编程接口**
+>
+> ![](img/20190718154523875.png)
+
+### 17.2 IO----
+
+> liunx的io模型是5种,这里只对Java的3种io模型进行简单介绍
+>
+> 视频讲解 : https://www.bilibili.com/video/BV1mA411q7Ry?from=search&seid=17536797699801891105
+>
 > 参考文章 : https://juejin.im/post/6844903664256024584
 
-#### 17.1.1 同步阻塞I/O(BIO)
+#### 17.2.1 同步阻塞I/O(BIO)
 
-#### 17.1.2 同步非阻塞I/O(NIO)
+> 
 
-#### 17.1.3 异步非阻塞I/O(AIO/NIO2)
+#### 17.2.2 同步非阻塞I/O(NIO)
+
+> 
+
+#### 17.2.3 异步非阻塞I/O(AIO/NIO2)
+
+> 
 
 
-
-### 17.2 socket----
 
 
 
