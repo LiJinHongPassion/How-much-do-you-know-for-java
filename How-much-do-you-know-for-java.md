@@ -258,7 +258,6 @@ public @interface CherryAnnotation {
 > }
 > ```
 >
-> 
 
 ---
 
@@ -277,6 +276,10 @@ public @interface CherryAnnotation {
 #### 2.1.1 <font color="red">为什么要重写equals()和hashCode()</font>
 
 > [为什么使用HashMap需要重写hashcode和equals方法？.md](./文章/为什么使用HashMap需要重写hashcode和equals方法？.md) 
+
+#### 2.1.2 HashMap为什么是2的n次幂-----
+
+> 参考 : 
 
 ### 2.2 ConcurrentHashMap
 
@@ -3189,6 +3192,10 @@ Redis默认每隔100ms随机抽取一些设置了过期时间的key，检查是�
 
 > 参考文章 : https://www.jianshu.com/p/d32b16f12f09
 
+#### 7.8.3 redis - 附近的人
+
+> 参考文章 : https://juejin.im/post/6844903966061363207#heading-1
+
 ---
 
 <div STYLE="page-break-after: always;"></div>
@@ -4873,7 +4880,20 @@ public class QuickSort {
 
 #### JDBC连接池源码
 
+## <font color="red">17 网络编程</font>------
+### 17.1 IO----
 
+> 参考文章 : https://juejin.im/post/6844903664256024584 
+
+#### 17.1.1 同步阻塞I/O(BIO)
+
+#### 17.1.2 同步非阻塞I/O(NIO)
+
+#### 17.1.3 aio
+
+
+
+### 17.2 socket----
 
 
 
