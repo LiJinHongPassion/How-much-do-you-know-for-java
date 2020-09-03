@@ -4883,13 +4883,13 @@ public class QuickSort {
 ## <font color="red">17 网络编程</font>------
 ### 17.1 IO----
 
-> 参考文章 : https://juejin.im/post/6844903664256024584 
+> 参考文章 : https://juejin.im/post/6844903664256024584
 
 #### 17.1.1 同步阻塞I/O(BIO)
 
 #### 17.1.2 同步非阻塞I/O(NIO)
 
-#### 17.1.3 aio
+#### 17.1.3 异步非阻塞I/O(AIO/NIO2)
 
 
 
