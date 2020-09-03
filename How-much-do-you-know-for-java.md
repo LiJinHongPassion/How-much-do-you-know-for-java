@@ -2310,20 +2310,43 @@ class Rectangle {
 
 ### 5.4 @requestbody和@responsebody
 
- https://www.cnblogs.com/daimajun/p/7152970.html 
+> 参考 : https://www.cnblogs.com/daimajun/p/7152970.html  
 
-#### 5.4.1 @ResponseBody：结果直接写入 HTTP response body 
+#### 5.4.1 @ResponseBody
 
 > 一般在异步获取数据时使用【也就是AJAX】，在使用 @RequestMapping后，返回值通常解析为跳转路径，但是加上 @ResponseBody 后返回结果不会被解析为跳转路径，而是直接写入 HTTP response body 中。 比如异步获取 json 数据，加上 @ResponseBody 后，会直接返回 json 数据。
 
-#### 5.4.2    @RequestBody ：将 HTTP 请求正文插入方法中形参上，使用适合的 HttpMessageConverter 将请求体写入某个对象（封装为对应的 JavaBean 对象）。 
+#### 5.4.2    @RequestBody 
+
+> 参考 : https://blog.csdn.net/qq_36090463/article/details/80990938
+>
+> ```txt
+> //官方文档
+> You can use the @RequestBody annotation to have the request body read and deserialized into an Object through an HttpMessageConverter. The following example uses a @RequestBody argument:
+> 
+> @PostMapping("/accounts")
+> public void handle(@RequestBody Account account) {
+>     // ...
+> }
+> You can use the Message Converters option of the MVC Config to configure or customize message conversion.
+> 
+> You can use @RequestBody in combination with javax.validation.Valid or Spring’s @Validated annotation, both of which cause Standard Bean Validation to be applied. By default, validation errors cause a MethodArgumentNotValidException, which is turned into a 400 (BAD_REQUEST) response. Alternatively, you can handle validation errors locally within the controller through an Errors or BindingResult argument, as the following example shows:
+> 
+> @PostMapping("/accounts")
+> public void handle(@Valid @RequestBody Account account, BindingResult result) {
+>     // ...
+> }
+> ```
+
 > @RequestBody是作用在形参列表上，用于将前台发送过来固定格式的数据【xml 格式或者 json等】封装为对应的 JavaBean 对象，封装时使用到的一个对象是系统默认配置的 HttpMessageConverter进行解析，然后封装到形参上。 
 
 ### 5.5 spring的分发器什么作用，用了什么组件
 
 
 
-### 5.6 spring事务的传播性
+### 5.6 spring事务
+
+#### 5.6.1 spring事务的传播性
 
 > 参考 : https://my.oschina.net/u/4030990/blog/3118266?_from=gitee_rec
 
@@ -2339,9 +2362,11 @@ class Rectangle {
 | **isolation**                            | 该属性用于设置底层数据库的事务隔离级别，事务隔离级别用于处理多事务并发的情况，通常使用数据库的默认隔离级别即可，基本不需要进行设置 |
 | **timeout**                              | 该属性用于设置事务的超时秒数，默认值为-1表示永不超时         |
 
-参考失效请看： https://lijinhongpassion.github.io/codeant/b019.html 
+#### 5.6.2 spring事务怎么实现的--------
 
- https://lijinhongpassion.github.io/codeant/fb49.html 
+#### 5.6.3 在一个`selecte`接口添加了事务注解, 会怎样--------------
+
+
 
 
 
