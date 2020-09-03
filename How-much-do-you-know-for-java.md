@@ -3002,7 +3002,7 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 
 **使用**
 
-> 如果使用是a1,a2,a3,a4顺序建立的索引, where条件中可以使用的是
+> 索引最左匹配原则 : 如果使用是a1,a2,a3,a4顺序建立的索引, where条件中可以使用的是
 >
 > a1,a2,a3,a4      
 > a1,a2,a3
@@ -4824,7 +4824,7 @@ public class QuickSort {
 
  https://blog.csdn.net/llianlianpay/article/details/79768890 
 
-
+<div STYLE="page-break-after: always;"></div>
 
 ## 14. 设计模式
 
@@ -4870,7 +4870,7 @@ public class QuickSort {
 
 ###### spring的单例模式
 
-
+<div STYLE="page-break-after: always;"></div>
 
 ## 15. 中间件原理
 
@@ -4879,6 +4879,10 @@ public class QuickSort {
 ## 16. TomCat
 
 #### JDBC连接池源码
+
+
+
+<div STYLE="page-break-after: always;"></div>
 
 ## <font color="red">17 网络编程</font>------
 
@@ -4913,6 +4917,8 @@ public class QuickSort {
 #### 17.2.3 异步非阻塞I/O(AIO/NIO2)
 
 > 
+
+### 17.3 netty----
 
 
 
