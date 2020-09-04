@@ -2316,7 +2316,7 @@ class Rectangle {
 >
 > 视频讲解 : https://www.bilibili.com/video/BV1mA411q7Ry?from=search&seid=17536797699801891105
 >
-> 参考文章 : https://juejin.im/post/6844903664256024584
+> 参考文章 : https://juejin.im/post/6844903664256024584  https://juejin.im/post/6844903975448215560
 
 #### 5.2.1 同步阻塞I/O(BIO)
 
@@ -2332,7 +2332,7 @@ class Rectangle {
 
 ### 5.3 netty----
 
-
+> Netty是 *一个异步事件驱动的网络应用程序框架，*用于快速开发可维护的高性能协议服务器和客户端。Netty是一个NIO客户端服务器框架，可以快速轻松地开发网络应用程序，例如协议服务器和客户端。它极大地简化了TCP和UDP套接字服务器等网络编程。
 
 ---
 
