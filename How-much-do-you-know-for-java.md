@@ -2101,6 +2101,18 @@ class Rectangle {
 
 可以发现利用填充数据的方式，让读写的变量分割到不同缓存行，可以很好挺高性能~
 
+
+
+### 3.18 <font color="red">ThreadLocal</font>--------------
+
+#### 是什么
+
+#### 怎么用
+
+#### ThreadLocalMap
+
+
+
 ---
 
 <div STYLE="page-break-after: always;"></div>
