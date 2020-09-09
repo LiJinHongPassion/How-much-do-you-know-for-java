@@ -2296,7 +2296,7 @@ class Rectangle {
 
 <div STYLE="page-break-after: always;"></div>
 
-## 5 网络编程</font>------
+## 5 <font color="red">网络编程</font>------
 
 ### 5.1 socket
 
@@ -3862,6 +3862,8 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 
 > 高清图 : https://www.processon.com/view/5c406df3e4b056ae29f3d544
 >
+> > 2020年初级架构 - https://juejin.im/post/6870288195674718222
+>
 > **2020年分布式技术栈: **[`springcloud alibaba`和`springcloud H版`](https://www.processon.com/special/template/5e6b4886e4b00fb1da15408a#map)
 
 ![QQ截图20200826172024](img/QQ%E6%88%AA%E5%9B%BE20200826172024.png)
@@ -5016,4 +5018,4 @@ public class QuickSort {
 - 观察者
 - 适配器
 - 责任链
-- 建造者
+- 建造者w
