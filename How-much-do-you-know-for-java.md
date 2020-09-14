@@ -2119,6 +2119,17 @@ class Rectangle {
 
 #### 3.18.2 怎么用
 
+**常见方法**
+
+> public ThreadLocal()
+>
+> public T get() 
+> public void set(T value) 
+> public void remove() 
+> protected T initialValue()
+
+initialValue方法的访问修饰符是protected，该方法为第一次调用get方法提供一个初始值。默认情况下，第一次调用get方法返回值null。在使用时，我们一般会复写ThreadLocal的initialValue方法,使第一次调用get方法时返回一个我们设定的初始值。
+
 > ```java
 > 
 > ```
@@ -2180,6 +2191,10 @@ class Rectangle {
 > 这个问题确实存在，没办法通过ThreadLocal解决，而是需要程序员在完成ThreadLocal的使用后要养成手动调用remove的习惯，从而避免内存泄漏。
 
 ##### ThreadLocalMap中如何解决Hash冲突
+
+##### ThreadLocal和Synchronized的区别
+
+
 
 
 
@@ -3962,6 +3977,8 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 **示例**
 
 > `-Xmx1024m -Xms1024m -XX:+UseConcMarkSweepGC -XX:+PrintGCDetails`
+>
+> 最大堆( `-Xmx` )的大小和初始堆( `Xms` )大小为1024m, 设置的并发收集器( `CMS` ),  打印GC详细日志
 
 ---
 
@@ -4931,6 +4948,10 @@ public class QuickSort {
 ## 14. 数据结构
 
 ### 14.1 线性表
+
+#### 2020.09 牛客网高频笔试题
+
+
 
 ### 14.2 树
 
