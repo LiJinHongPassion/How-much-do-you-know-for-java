@@ -1005,7 +1005,11 @@ static boolean initFlag = false;
 >
 > **优势 : **`volatile`保证了变量的缓存可见性, 有序性, 但是不保证原子性, 所以这里添加 `synchronized`包装`single`的原子性, 并且在外层再添加了一个`if`
 
-### 3.6  Thread常见方法
+### 3.6 信号量
+
+> Semaphore与CountDownLatch
+
+### 3.7  Thread常见方法
 
 | **方法名** | **static** | **功能说明** | **注意** |
 | ---------- | ---------- | ------------ | -------- |
@@ -1031,7 +1035,7 @@ static boolean initFlag = false;
 >
 >非阻塞式的解决方案：原子变量
 
-### 3.7 创建线程的几种方式： Tread、runable、callable
+### 3.8 创建线程的几种方式： Tread、runable、callable
 
 - 继承Tread实现run方法
 - 实现runable接口
@@ -1039,7 +1043,7 @@ static boolean initFlag = false;
 
 **注：**有返回值的任务必须实现 Callable 接口，类似的，无返回值的任务必须 Runnable 接口
 
-### 3.8 线程的状态：新建  、就绪、执行、阻塞、死亡
+### 3.9 线程的状态：新建  、就绪、执行、阻塞、死亡
 
 - NEW 尚未启动
 - RUNNABLE 正在执行中
@@ -1048,7 +1052,7 @@ static boolean initFlag = false;
 - TIMED_WAITING 等待指定的时间重新被唤醒的状态
 - TERMINATED 执行完成
 
-### 3.9 线程池----------------------
+### 3.10 线程池----------------------
 
 > **参考文章 :** https://juejin.im/post/6844903889678893063#heading-34
 
@@ -1062,24 +1066,24 @@ static boolean initFlag = false;
 >
 > 面试问题5：说说几种常见的线程池及使用场景?
 
-#### 3.9.1 Java的线程池说一下，各个参数的作用，如何进行的?
+#### 3.10.1 Java的线程池说一下，各个参数的作用，如何进行的?
 
 
 
-### 3.9 sleep和wait的区别
+### 3.11 sleep和wait的区别
 
 - 类的不同：sleep() 来自 Thread，**wait() 来自 Object**。
 - 释放锁：sleep() 不释放锁；**wait() 释放锁**。
 - 用法不同：sleep() 时间到会自动恢复；**wait() 可以使用 notify() / notifyAll()直接唤醒**。
 - 搭配：sleep 不需要强制和 synchronized 配合使用，但 wait 需要和 synchronized 一起用 
 
-### 3.10 synchronized 和 Lock 有什么区别？
+### 3.12 synchronized 和 Lock 有什么区别？
 
 - synchronized 可以给类、方法、代码块加锁；而 lock 只能给代码块加锁。
 - synchronized 不需要手动获取锁和释放锁，使用简单，发生异常会自动释放锁，不会造成死锁；而 lock 需要自己加锁和释放锁，如果使用不当没有 unLock()去释放锁就会造成死锁。
 - 通过 Lock 可以知道有没有成功获取锁，而 synchronized 却无法办到。
 
-### 3.11 Java后台线程
+### 3.13 Java后台线程
 
 笔记： https://lijinhongpassion.github.io/codeant/25c3.html 
 
@@ -1091,7 +1095,7 @@ static boolean initFlag = false;
 6. example: **垃圾回收线程就是一个经典的守护线程**，当我们的程序中不再有任何运行的Thread,程序就不会再产生垃圾，垃圾回收器也就无事可做，所以当垃圾回收线程是 JVM 上仅剩的线程时，垃圾回收线程会自动离开。它始终在低级别的状态中运行，用于实时监控和管理系统中的可回收资源。
 7. 生命周期：守护进程（Daemon）是运行在后台的一种特殊进程。它独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。也就是说守护线程不依赖于终端，但是依赖于系统，与系统“同生共死”。当 JVM 中所有的线程都是守护线程的时候，JVM 就可以退出了；如果还有一个或以上的非守护线程则 JVM 不会退出。
 
-### 3.12 Java锁
+### 3.14 Java锁
 
 >  参考文章：https://mp.weixin.qq.com/s/XpZW52WoBnS3IJnwlDhEuQ作者：搜云库技术团队
 
@@ -1119,7 +1123,7 @@ static boolean initFlag = false;
 
 ---
 
-#### 3.12.1 公平锁 / 非公平锁
+#### 3.14.1 公平锁 / 非公平锁
 
 **公平锁**
 
@@ -1134,7 +1138,7 @@ static boolean initFlag = false;
 
 ---
 
-#### 3.12.2  可重入锁 / 不可重入锁
+#### 3.14.2  可重入锁 / 不可重入锁
 
 **可重入锁**
 
@@ -1260,7 +1264,7 @@ final boolean nonfairTryAcquire(int acquires) {
 
 ---
 
-#### 3.12.3  独享锁 / 共享锁
+#### 3.14.3  独享锁 / 共享锁
 
 > 独享锁和共享锁在你去读C.U.T包下的ReeReentrantLock和ReentrantReadWriteLock你就会发现，它俩一个是独享一个是共享锁。
 >
@@ -1275,7 +1279,7 @@ final boolean nonfairTryAcquire(int acquires) {
 
 ---
 
-#### 3.12.4  互斥锁 / 读写锁
+#### 3.14.4  互斥锁 / 读写锁
 
 **互斥锁**
 
@@ -1296,7 +1300,7 @@ final boolean nonfairTryAcquire(int acquires) {
 
 ---
 
-#### 3.12.5  乐观锁 / 悲观锁
+#### 3.14.5  乐观锁 / 悲观锁
 
 **悲观锁**
 
@@ -1308,7 +1312,7 @@ final boolean nonfairTryAcquire(int acquires) {
 
 ---
 
-#### 3.12.6  分段锁
+#### 3.14.6  分段锁
 
 > 分段锁其实是一种锁的设计，并不是具体的一种锁，对于`ConcurrentHashMap`而言，其并发的实现就是通过分段锁的形式来实现高效的并发操作。
 >
@@ -1331,7 +1335,7 @@ final boolean nonfairTryAcquire(int acquires) {
 
 ---
 
-#### 3.12.7  <font color="red">偏向锁01 / 轻量级锁10 / 重量级锁11 ( synchronized原理)</font>
+#### 3.14.7  <font color="red">偏向锁01 / 轻量级锁10 / 重量级锁11 ( synchronized原理)</font>
 
 <font color="red">偏向锁 / 轻量级锁 / 重量级锁 ( synchronized 在JDK1.8的优化)</font>
 
@@ -1396,7 +1400,7 @@ final boolean nonfairTryAcquire(int acquires) {
 
 ---
 
-#### 3.12.8  自旋锁
+#### 3.14.8  自旋锁
 
 > 我们知道CAS算法是乐观锁的一种实现方式，CAS算法中又涉及到自旋锁，所以这里给大家讲一下什么是自旋锁。
 
@@ -1507,7 +1511,7 @@ public class ReentrantSpinLock {
 
 5.基于自旋锁，可以实现具备公平性和可重入性质的锁。
 
-### 3.13 Monitor原理( synchronized原理 )
+### 3.15 Monitor原理( synchronized原理 )
 
 **Monitor是什么**
 
@@ -1517,9 +1521,9 @@ public class ReentrantSpinLock {
 
 
 
-### 3.14 Synchronized  & ReentrantLock
+### 3.16 Synchronized  & ReentrantLock
 
-#### 3.14.1 Synchronized  &  ReentrantLock 锁类型的区别
+#### 3.16.1 Synchronized  &  ReentrantLock 锁类型的区别
 
 |                       **Synchronized**                       |            **ReentrantLock**             |
 | :----------------------------------------------------------: | :--------------------------------------: |
@@ -1529,7 +1533,7 @@ public class ReentrantSpinLock {
 |                            悲观锁                            |                  悲观锁                  |
 |                            独享锁                            |                                          |
 
-#### 3.14.2 ReentrantLock基础
+#### 3.16.2 ReentrantLock基础
 
 **之前对ReentrantLock没有学习过, 这里简单写一下**
 
@@ -1671,13 +1675,13 @@ public class ReentrantSpinLock {
 
 
 
-#### 3.14.3 ReentrantReadWriteLock
+#### 3.16.3 ReentrantReadWriteLock
 
 
 
-### 3.15 CAS / AQS
+### 3.17 CAS / AQS
 
-#### 3.15.1 CAS : 比较并交换
+#### 3.17.1 CAS : 比较并交换
 
 > CAS 是 compare and swap 的简写，即比较并交换。它是指一种操作机制，而不是某个具体的类或方法。在 Java 平台上对这种操作进行了包装。在 Unsafe 类中，调用代码如下：
 >
@@ -1784,7 +1788,7 @@ public final int getAndAddInt(Object var1, long var2, int var4) {
 
 **省略.......**
 
-#### 3.15.2 AQS : 抽象队列同步器( AbstractQueuedSynchronizer ) -------------------- 
+#### 3.17.2 AQS : 抽象队列同步器( AbstractQueuedSynchronizer ) -------------------- 
 
 > 参考文章 : https://juejin.im/post/6844903903188746247#heading-0
 
@@ -1834,23 +1838,23 @@ state 使用了 32bit int 来维护同步状态，因为当时使用 long 在很
 
 设计时借鉴了 CLH 队列，它是一种单向无锁队列
 
-##### 3.15.2.1 类图
+##### 3.17.2.1 类图
 
 ![](img/16c151e53fa38334)
 
-##### 3.15.2.2 state 状态的维护
+##### 3.17.2.2 state 状态的维护
 
 - state，int变量，锁的状态，用volatile修饰，保证多线程中的可见性。
 - getState()和setState()方法采用final修饰，限制AQS的子类重写它们两。
 - compareAndSetState（）方法采用乐观锁思想的CAS算法操作确保线程安全,保证状态 设置的原子性。
 
-##### 3.15.2.3 CLH同步队列
+##### 3.17.2.3 CLH同步队列
 
 ![](img/3f37b908ad9b482fb60de6478817a7dc~tplv-k3u1fbpfcp-zoom-1.image)
 
 > **CLH(Craig, Landin, and Hagersten locks) 同步队列** 是一个FIFO双向队列，其内部通过节点head和tail记录队首和队尾元素，队列元素的类型为Node。AQS依赖它来完成同步状态state的管理，当前线程如果获取同步状态失败时，AQS则会将当前线程已经等待状态等信息构造成一个节点（Node）并将其加入到CLH同步队列，同时会阻塞当前线程，当同步状态释放时，会把首节点唤醒（公平锁），使其再次尝试获取同步状态。
 
-###### 3.15.2.3.1 Node节点
+###### 3.17.2.3.1 Node节点
 
 >  CLH同步队列中，一个节点表示一个线程，它保存着线程的引用（thread）、状态（waitStatus）、前驱节点（prev）、后继节点（next），condition队列的后续节点（nextWaiter）
 >
@@ -1858,7 +1862,7 @@ state 使用了 32bit int 来维护同步状态，因为当时使用 long 在很
 >
 > ![](img/16c454d3d62d9108)
 
-###### 3.15.2.3.2 入列
+###### 3.17.2.3.2 入列
 
 >  CLH队列入列就是**tail指向新节点、新节点的prev指向当前最后的节点，当前最后一个节点的next指向当前节点**。addWaiter方法如下：
 >
@@ -1899,7 +1903,7 @@ state 使用了 32bit int 来维护同步状态，因为当时使用 long 在很
 > }
 > ```
 
-###### 3.15.2.3.3 出列
+###### 3.17.2.3.3 出列
 
 > 首节点的线程释放同步状态后，将会唤醒它的后继节点（next），而后继节点将会在获取同步状态成功时将自己设置为首节点。
 >
@@ -1936,7 +1940,7 @@ state 使用了 32bit int 来维护同步状态，因为当时使用 long 在很
 > }
 > ```
 
-##### 3.15.2.4 ConditionObject通知
+##### 3.17.2.4 ConditionObject通知
 
 我们都知道，synchronized控制同步的时候，可以配合Object的wait()、notify()，notifyAll() 系列方法可以实现等待/通知模式。而Lock呢？它提供了条件Condition接口，配合await(),signal(),signalAll() 等方法也可以实现等待/通知机制。ConditionObject实现了Condition接口，给AQS提供条件变量的支持 。
 
@@ -1950,7 +1954,7 @@ ConditionObject队列与CLH队列的爱恨情仇：
 - 线程在某个ConditionObject对象上调用了singnal()方法后，等待队列中的firstWaiter会被加入到AQS的CLH队列中，等待被唤醒。
 - 当线程调用unLock()方法释放锁时，CLH队列中的head节点的下一个节点(在本例中是firtWaiter)，会被唤醒。
 
-##### 3.15.2.5 独占模式 -- ReentrantLock
+##### 3.17.2.5 独占模式 -- ReentrantLock
 
 > 独占式: 同一时刻仅有一个线程持有同步状态，如ReentrantLock。又可分为公平锁和非公平锁。
 >
@@ -1991,15 +1995,17 @@ ConditionObject队列与CLH队列的爱恨情仇：
 
 ##### ReentrantReadWriteLock
 
-##### 3.15.2.6 共享模式 -- Semaphore与CountDownLatch
+##### 3.17.2.6 共享模式 -- Semaphore与CountDownLatch
 
 > 共享模式:多个线程可同时执行，如Semaphore/CountDownLatch等都是共享式的产物。
 
-##### 3.15.2.7 自定义同步器
+> 参考文章 : [Semaphore](https://juejin.im/post/6844903605883895821)
+
+##### 3.17.2.7 自定义同步器-----
 
 > 
 
-### 3.16 引发死锁的四个条件
+### 3.18 引发死锁的四个条件
 
 > 互斥条件：一个资源每次只能被一个进程使用，即在一段时间内某 资源仅为一个进程所占有。此时若有其他进程请求该资源，则请求进程只能等待。
 >
@@ -2011,9 +2017,9 @@ ConditionObject队列与CLH队列的爱恨情仇：
 
 一个资源M是互斥的( 互斥条件 ), 现在有一个线程A对该资源M进行了加锁, 然后新来了一个线程B去获取该资源M, 获取失败, 线程B就会阻塞, 但是线程B对自己已经获取到了的其他资源( 这些资源中有线程A需要的资源 )不释放( 请求与保持 ); 由于资源M被线程A使用, 只能当线程A自动释放, 线程B才能去获取( 不可剥夺条件 ); 
 
-### 3.17 什么是多线程环境下的伪共享( 缓存行的问题 )
+### 3.19 什么是多线程环境下的伪共享( 缓存行的问题 )
 
-#### 3.17.1 什么是伪共享
+#### 3.19.1 什么是伪共享
 
 > CPU的缓存是以缓存行(cache line)为单位进行缓存的，当多个线程修改相互独立的变量，而这些变量又处于同一个缓存行时就会影响彼此的性能。这就是伪共享
 
@@ -2037,7 +2043,7 @@ ConditionObject队列与CLH队列的爱恨情仇：
 - 这时候，如果线程2发起修改b，因为缓存行已经失效了，所以**core2 这时会重新从主内存中读取该 Cache line 数据**。读完后，因为它要修改b的值，那么CPU2就通知其他CPU核，当前缓存行（Cache line）又已经失效。
 - 如果同一个Cache line的内容被多个线程读写，就很容易产生相互竞争，频繁回写主内存，会大大降低性能。
 
-#### 3.17.2 如何解决伪共享问题
+#### 3.19.2 如何解决伪共享问题
 
 既然伪共享是因为相互独立的变量存储到相同的缓存行导致的，一个缓存行大小是64字节。那么，我们就可以**使用空间换时间**，即数据填充的方式，把独立的变量分散到不同的缓存行
 
@@ -2103,11 +2109,11 @@ class Rectangle {
 
 
 
-### 3.18 <font color="red">ThreadLocal</font>--------------
+### 3.20 <font color="red">ThreadLocal</font>--------------
 
 > 参考文章 : https://juejin.im/post/6844903575026401288#heading-3
 
-#### 3.18.1 是什么
+#### 3.20.1 是什么
 
 **场景分析**
 
@@ -2117,7 +2123,7 @@ class Rectangle {
 
 > 线程与线程之间是相互隔离的, 为什么还需要ThreadLocal
 
-#### 3.18.2 怎么用
+#### 3.20.2 怎么用
 
 **常见方法**
 
@@ -2136,7 +2142,7 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 >
 > 
 
-#### 3.18.3 ThreadLocalMap
+#### 3.20.3 ThreadLocalMap
 
 #### 应用场景
 
