@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="1c039d17-4f5d-478e-91cb-931f34533432" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1gu2M09q0scEttT5dMM9DmvBmCp" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/com/codeant/rpc/four" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Administrator\Desktop\codeant-rpc\src\com\codeant\rpc\four" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Administrator\Desktop\codeant-rpc\src\com\codeant\rpc\three" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.RpcClient (1)">
+    <configuration name="RpcClient (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.codeant.rpc.four.client.RpcClient" />
+      <module name="codeant-rpc" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.codeant.rpc.four.client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RpcClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.codeant.rpc.three.client.RpcClient" />
+      <module name="codeant-rpc" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.codeant.rpc.three.client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RpcServer (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.codeant.rpc.four.server.RpcServer" />
+      <module name="codeant-rpc" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.codeant.rpc.four.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RpcServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.codeant.rpc.three.server.RpcServer" />
+      <module name="codeant-rpc" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.codeant.rpc.three.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.RpcClient (1)" />
+        <item itemvalue="Application.RpcServer (1)" />
+        <item itemvalue="Application.RpcClient" />
+        <item itemvalue="Application.RpcServer" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1c039d17-4f5d-478e-91cb-931f34533432" name="Default Changelist" comment="" />
+      <created>1598950104322</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1598950104322</updated>
+      <workItem from="1598950106854" duration="1295000" />
+      <workItem from="1599006109764" duration="14787000" />
+      <workItem from="1599718469976" duration="5369000" />
+      <workItem from="1599785499309" duration="4529000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="586" y="198" key="#Inspections" timestamp="1599037629212">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="586" y="198" key="#Inspections/0.0.1920.1040@0.0.1920.1040" timestamp="1599037629212" />
+    <state x="828" y="238" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1599040265669">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="828" y="238" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1599040265669" />
+    <state x="701" y="320" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1599718510562">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="701" y="320" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1599718510562" />
+    <state x="765" y="225" key="#com.intellij.ide.util.MemberChooser" timestamp="1599727968064">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="765" y="225" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1599727968064" />
+    <state x="847" y="429" width="447" height="222" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1599029326558">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="847" y="429" width="447" height="222" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1920.1040@0.0.1920.1040" timestamp="1599029326558" />
+    <state width="1340" height="261" key="GridCell.Tab.0.bottom" timestamp="1599827379072">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="261" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1599827379072" />
+    <state width="1340" height="261" key="GridCell.Tab.0.center" timestamp="1599827379072">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="261" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1599827379072" />
+    <state width="1340" height="261" key="GridCell.Tab.0.left" timestamp="1599827379072">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="261" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1599827379072" />
+    <state width="1340" height="261" key="GridCell.Tab.0.right" timestamp="1599827379072">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="261" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1599827379072" />
+    <state width="1340" height="261" key="GridCell.Tab.1.bottom" timestamp="1599827379072">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="261" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1599827379072" />
+    <state width="1340" height="261" key="GridCell.Tab.1.center" timestamp="1599827379072">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="261" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1599827379072" />
+    <state width="1340" height="261" key="GridCell.Tab.1.left" timestamp="1599827379072">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="261" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1599827379072" />
+    <state width="1340" height="261" key="GridCell.Tab.1.right" timestamp="1599827379072">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="261" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1599827379072" />
+    <state x="334" y="129" key="new project wizard" timestamp="1599042048441">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="334" y="129" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1599042048441" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1599728949645">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1599728949645" />
+  </component>
+</project>

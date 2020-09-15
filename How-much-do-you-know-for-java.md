@@ -378,7 +378,7 @@ public @interface CherryAnnotation {
 
 ### 2.4 linkedHashMap
 
->LinkedHashMap是HashMap的一个子类，利用双链表保存了记录的插入顺序.
+>LinkedHashMap是HashMap的一个子类，<font color="red">利用双链表保存了记录的插入顺序.</font>
 >
 >其他特性和HashMap一样的.
 
@@ -1052,9 +1052,11 @@ static boolean initFlag = false;
 - TIMED_WAITING 等待指定的时间重新被唤醒的状态
 - TERMINATED 执行完成
 
-### 3.10 线程池----------------------
+### 3.10 线程池
 
 > **参考文章 :** https://juejin.im/post/6844903889678893063#heading-34
+>
+> 本地文章 : [线程池](./文章/线程池.md)
 
 > 面试问题1：Java的线程池说一下，各个参数的作用，如何进行的?
 >
@@ -1065,10 +1067,6 @@ static boolean initFlag = false;
 > 面试问题4：使用无界队列的线程池会导致内存飙升吗？
 >
 > 面试问题5：说说几种常见的线程池及使用场景?
-
-#### 3.10.1 Java的线程池说一下，各个参数的作用，如何进行的?
-
-
 
 ### 3.11 sleep和wait的区别
 
@@ -4049,7 +4047,7 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 
 #### 11.3.2 手写RPC
 
-> [代码](.\代码\RPC\codeant-rpc.rar)
+> [代码](.\代码\RPC\codeant-rpc)
 
 > 1. 了解动态代理
 > 2. 了解`socket`, 使用`socket`通信
@@ -4373,7 +4371,7 @@ https://www.cnblogs.com/pickKnow/p/11384441.html
 
 #### 代码
 
-> [算法代码压缩包](.\代码\算法\alg.rar)
+> [算法代码压缩包](.\代码\算法\alg)
 
 ### 13.1 查找算法
 
@@ -5038,6 +5036,8 @@ public class QuickSort {
 <div STYLE="page-break-after: always;"></div>
 
 ## 15. 设计模式
+
+> [设计模式代码](./代码/设计模式)
 
 #### 15.1 设计原则
 
