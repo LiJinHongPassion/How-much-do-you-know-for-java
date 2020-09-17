@@ -1194,31 +1194,37 @@ static boolean initFlag = false;
 
 ### 3.14 Java锁
 
->  参考文章：https://mp.weixin.qq.com/s/XpZW52WoBnS3IJnwlDhEuQ作者：搜云库技术团队
+> [本地文章-java21种锁图解](./文章/24张图带你彻底理解Java中的21种锁.pdf)
 
-在读很多并发文章中，会提及各种各样锁如公平锁，乐观锁等等，这篇文章介绍各种锁的分类。介绍的内容如下：
-
-1.公平锁 / 非公平锁
-
-2.可重入锁 / 不可重入锁
-
-3.独享锁 / 共享锁
-
-4.互斥锁 / 读写锁
-
-5.乐观锁 / 悲观锁
-
-6.分段锁
-
-7.偏向锁 / 轻量级锁 / 重量级锁
-
-8.自旋锁
+| 1    | 乐观锁   | CAS                                                          |
+| ---- | -------- | ------------------------------------------------------------ |
+| 2    | 悲观锁   | synchronized、vector、hashtable                              |
+| 3    | 自旋锁   | CAS                                                          |
+| 4    | 可重入锁 | synchronized、Reentrantlock、Lock                            |
+| 5    | 读写锁   | ReentrantReadWriteLock，CopyOnWriteArrayList、CopyOnWriteArraySet |
+| 6    | 公平锁   | Reentrantlock(true)                                          |
+| 7    | 非公平锁 | synchronized、reentrantlock(false)                           |
+| 8    | 共享锁   | ReentrantReadWriteLock中读锁                                 |
+| 9    | 独占锁   | synchronized、vector、hashtable、ReentrantReadWriteLock中写锁 |
+| 10   | 重量级锁 | synchronized                                                 |
+| 11   | 轻量级锁 | 锁优化技术                                                   |
+| 12   | 偏向锁   | 锁优化技术                                                   |
+| 13   | 分段锁   | concurrentHashMap                                            |
+| 14   | 互斥锁   | synchronized                                                 |
+| 15   | 同步锁   | synchronized                                                 |
+| 16   | 死锁     | 相互请求对方的资源                                           |
+| 17   | 锁粗化   | 锁优化技术                                                   |
+| 18   | 锁消除   | 锁优化技术                                                   |
 
 上面是很多锁的名词，这些分类并不是全是指锁的状态，有的指锁的特性，有的指锁的设计，下面总结的内容是对每个锁的名词进行一定的解释。
 
 > **实现了AQS的锁有：自旋锁、互斥锁、读锁写锁、条件产量、信号量、栅栏都是AQS的衍生物**
 
 ---
+
+> 参考文章：https://mp.weixin.qq.com/s/XpZW52WoBnS3IJnwlDhEuQ作者：搜云库技术团队
+>
+> 在读很多并发文章中，会提及各种各样锁如公平锁，乐观锁等等，这篇文章介绍各种锁的分类。介绍的内容如下：
 
 #### 3.14.1 公平锁 / 非公平锁
 
@@ -2312,6 +2318,16 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 
 ![](img/16c47ba8756beeb3)
 
+**<font color="red">什么是协议</font>**
+
+> 大白话讲,就是服务器与服务器之间通信的一种规范
+>
+> 服务器A向B传输信息
+>
+> A将数据依照协议规定的格式传输到B
+>
+> B接收到数据,按照协议的格式解析, 获取自己想要的数据
+
 ### 4.1 网络层
 
 #### 4.1.1 ARP / RARP
@@ -2487,6 +2503,8 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 > https://juejin.im/post/6844903604868874247#heading-31
 
 #### 4.3.2 DNS------
+
+#### 4.3.3 FTP-----
 
 
 
@@ -3377,7 +3395,7 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 > - 单线程（节省了CPU上下文切换的时间）
 > - 内存操作
 
-### 8.4 redis6.0之后为什么是多线程 / redis为什么这么快
+### 8.4 redis6.0之后为什么是多线程 / redis为什么这么快( 2020年 )-----
 
 > 相对于之前的版本, 6.0版本的新特性中把`IO`改为多线程了
 
