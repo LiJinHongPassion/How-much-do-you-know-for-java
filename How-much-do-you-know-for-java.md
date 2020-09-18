@@ -263,6 +263,10 @@ public @interface CherryAnnotation {
 
 > 参考文章 : https://juejin.im/post/6873691965892853767
 
+<img src="img/20200814123800698.png" style="zoom:150%;" />
+
+<img src="img/20200814123626227.png" style="zoom:106%;" />
+
 ![](img/20200815153632335.png)
 
 > 以64位操作系统为例，new Object()占用大小分为两种情况：
@@ -2627,6 +2631,24 @@ aFile.close();
 > UDP : 服务器只管发送, 不管客户端是否接收到数据
 >
 > 网络实时传输协议 : RTSP/RTMP/SRT/RTP
+
+### 5.5 系统学习TCP
+
+> 视频 : https://www.bilibili.com/video/BV1Mx411v7rJ?p=1
+
+#### TCP的结构
+
+#### 数据的传输
+
+#### 粘包拆包
+
+> https://juejin.im/post/6844904083430572046
+
+#### 窗口滑动
+
+> 参考文章 : [一篇带你读懂TCP之“滑动窗口”协议](https://juejin.im/post/6844903809995505671)
+
+
 
 ---
 
