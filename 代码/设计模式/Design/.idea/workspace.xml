@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5e486d8c-466e-4bdc-a45f-f5f2e8ceaa8c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/abstractFactory/factory/AFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/abstractFactory/factory/AbstractRestaurant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/abstractFactory/factory/BFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/abstractFactory/factory/CFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/abstractFactory/product/food/Bread.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/abstractFactory/product/food/IFood.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/abstractFactory/product/food/Meat.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/abstractFactory/product/food/Milk.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/abstractFactory/product/tool/Fork.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/abstractFactory/product/tool/ITool.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/abstractFactory/product/tool/Knife.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/abstractFactory/product/tool/Spoon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/abstractFactory/说明.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/abstractFactory/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abstractFactory/Main.java" afterDir="false" />
-    </list>
+    <list default="true" id="5e486d8c-466e-4bdc-a45f-f5f2e8ceaa8c" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -76,7 +61,7 @@
       <recent name="C:\Users\Administrator\Desktop\Design\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main (3)">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="test.one.Main" />
       <module name="Design" />
@@ -131,7 +116,6 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main (3)" />
         <item itemvalue="Application.Main (2)" />
         <item itemvalue="Application.Main (1)" />
         <item itemvalue="Application.Main" />
@@ -150,6 +134,7 @@
       <updated>1600129037278</updated>
       <workItem from="1600129040780" duration="6100000" />
       <workItem from="1600218069534" duration="4014000" />
+      <workItem from="1600304621772" duration="1733000" />
     </task>
     <servers />
   </component>
