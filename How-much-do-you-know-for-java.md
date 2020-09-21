@@ -3119,10 +3119,63 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 >- 查询日志
 >- 慢查询日志
 >- 事务日志
->    - redo log( 保证了持久性 )
->    - undo log( 保证了原子性 )
+>   - redo log( 保证了持久性 )
+>   - undo log( 保证了原子性 )
 >- 二进制日志
+>   - binlog
 >- 中继日志
+
+### 7.6.1 bin log
+
+>  binlog用于记录数据库执行的写入性操作(不包括查询)信息，以二进制的形式保存在磁盘中。binlog是mysql的逻辑日志，并且由Server层进行记录，使用任何存储引擎的mysql数据库都会记录binlog日志。
+>
+> - 逻辑日志：可以简单理解为记录的就是sql语句。
+> - 物理日志：因为mysql数据最终是保存在数据页中的，物理日志记录的就是数据页变更。
+>
+> binlog是通过追加的方式进行写入的，可以通过max_binlog_size参数设置每个binlog文件的大小，当文件大小达到给定值之后，会生成新的文件来保存日志。
+
+### **binlog使用场景**
+
+> 在实际应用中，binlog的主要使用场景有两个，分别是主从复制和数据恢复。
+>
+> - 主从复制：在Master端开启binlog，然后将binlog发送到各个Slave端，Slave端重放binlog从而达到主从数据一致。
+> - 数据恢复：通过使用mysqlbinlog工具来恢复数据。
+
+### **binlog刷盘时机**
+
+> 对于InnoDB存储引擎而言，只有在事务提交时才会记录biglog，此时记录还在内存中，那么biglog是什么时候刷到磁盘中的呢？mysql通过sync_binlog参数控制biglog的刷盘时机，取值范围是0-N：
+>
+> - 0：不去强制要求，由系统自行判断何时写入磁盘；
+> - 1：每次commit的时候都要将binlog写入磁盘；
+> - N：每N个事务，才会将binlog写入磁盘。
+>
+> 从上面可以看出，sync_binlog最安全的是设置是1，这也是MySQL 5.7.7之后版本的默认值。但是设置一个大一些的值可以提升数据库性能，因此实际情况下也可以将值适当调大，牺牲一定的一致性来获取更好的性能。
+>
+> 推荐阅读：[Java面试题拆解](https://mp.weixin.qq.com/s?__biz=MzIyNDU2ODA4OQ==&mid=2247485351&idx=2&sn=214225ab4345f4d9c562900cb42a52ba&scene=21#wechat_redirect)
+
+### **binlog日志格式**
+
+binlog日志有三种格式，分别为STATMENT、ROW和MIXED。
+
+> 在 MySQL 5.7.7之前，默认的格式是STATEMENT，MySQL 5.7.7之后，默认值是ROW。日志格式通过binlog-format指定。
+
+**STATMENT**
+
+> 基于SQL语句的复制(statement-based replication, SBR)，每一条会修改数据的sql语句会记录到binlog中。
+>
+> - 优点：不需要记录每一行的变化，减少了binlog日志量，节约了IO, 从而提高了性能；
+> - 缺点：在某些情况下会导致主从数据不一致，比如执行sysdate()、slepp()等。
+
+**ROW**
+
+> 基于行的复制(row-based replication, RBR)，不记录每条sql语句的上下文信息，仅需记录哪条数据被修改了。
+>
+> - 优点：不会出现某些特定情况下的存储过程、或function、或trigger的调用和触发无法被正确复制的问题；
+> - 缺点：会产生大量的日志，尤其是alter table的时候会让日志暴涨
+
+**MIXED**
+
+> 基于STATMENT和ROW两种模式的混合复制(mixed-based replication, MBR)，一般的复制使用STATEMENT模式保存binlog，对于STATEMENT模式无法复制的操作使用ROW模式保存binlog
 
 #### 7.6.1 redo log( **重做日志redo** )
 
