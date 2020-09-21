@@ -3007,11 +3007,15 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 
 ### 7.4 锁
 
+> [MySQL的锁到底有多少内容 ？再和腾讯大佬的技术面谈，我还是小看锁了！](https://segmentfault.com/a/1190000023846387)
+>
 > [innodb的锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locking.html)
 >
 > [查看innodb何种情况下使用何种锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locks-set.html)
 >
 > [InnoDB中的死锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-deadlocks.html)
+
+![](img/image-20200921171530119.png)
 
 ##### 7.4.1 LBCC ( 当前读 )
 
@@ -3479,7 +3483,7 @@ binlog日志有三种格式，分别为STATMENT、ROW和MIXED。
 
 ### 8.1 redis的数据类型
 
-> string、list、hash、set、zset（sortset）
+> string、list、hash、set、zset（sortset）stream( 5.0 )
 >
 > 应用场景 : https://juejin.im/post/6844903951502934030
 
@@ -3657,7 +3661,7 @@ Redis默认每隔100ms随机抽取一些设置了过期时间的key，检查是�
 
 #### 8.9.2 redis - 异步消息队列与延时队列
 
-> 参考文章 : https://www.jianshu.com/p/d32b16f12f09
+> 参考文章 : https://www.jianshu.com/p/d32b16f12f09   [stream做消息队列](http://www.redis.cn/topics/streams-intro.html)
 
 #### 8.9.3 redis Geo - 附近的人
 
