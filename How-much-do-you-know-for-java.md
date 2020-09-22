@@ -277,7 +277,7 @@ public @interface CherryAnnotation {
 >    开启指针压缩后，Class Pointer会被压缩为4字节，最终大小为：
 >    **8(Mark Word)+4(Class Pointer)+4(对齐填充)=16字节**
 
-### 1.12 static 和 final-----
+### 1.12 static 和 final
 
 **static**
 
@@ -2430,7 +2430,7 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 >
 > ​       （5）源主机收到从RARP服务器的响应信息，就利用得到的IP地址进行通讯；如果一直没有收到RARP服务器的响应信息，表示初始化失败。 
 
-#### 4.1.2 IP、ICMP协议----------
+#### 4.1.2 IP、ICMP协议（了解）
 
 
 
@@ -2564,9 +2564,9 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 
 > https://juejin.im/post/6844903604868874247#heading-31
 
-#### 4.3.2 DNS------
+#### 4.3.2 DNS(了解)
 
-#### 4.3.3 FTP-----
+#### 4.3.3 FTP(了解)
 
 
 
@@ -2584,6 +2584,8 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 
 ### 5.1 TCP/UDP -- Java实现
 
+> [代码](./代码/网络编程TCPUDP)
+>
 > 上面将TCP、UDP的概念讲解清楚了， 这里来讲一下关于Java对这两个协议如何使用，其中示例中的流为bio，具体流程如下：
 
 ![image-20200922092921465](img/image-20200922092921465.png)
