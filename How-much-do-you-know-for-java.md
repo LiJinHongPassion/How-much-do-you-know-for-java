@@ -277,6 +277,12 @@ public @interface CherryAnnotation {
 >    开启指针压缩后，Class Pointer会被压缩为4字节，最终大小为：
 >    **8(Mark Word)+4(Class Pointer)+4(对齐填充)=16字节**
 
+### 1.12 static 和 final-----
+
+**static**
+
+> 
+
 ---
 
 <div STYLE="page-break-after: always;"></div>
@@ -2538,7 +2544,105 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 
 ## 5 <font color="red">网络编程</font>------
 
-### 5.1 socket
+### 5.1 TCP/UDP
+
+> 上面将TCP、UDP的概念讲解清楚了， 这里来讲一下关于Java对这两个协议如何使用，其中示例中的流为bio，具体流程如下：
+
+![image-20200922092921465](img/image-20200922092921465.png)
+
+**TCP-client**
+
+>```java
+>public class Client {
+>    static final String ip = "127.0.0.1";
+>    static final int port = 8888;
+>
+>    public static void main(String[] args) throws IOException {
+>        //1.定义客户端 Socket
+>        Socket socket = new Socket(ip,port);//ip ->服务器的ip   端口:服务端的端口号
+>        //2.io
+>        //获取输出流   OutputStream getOutputStream()   返回此套接字的输出流。
+>        DataOutputStream os=new DataOutputStream(socket.getOutputStream());
+>        os.writeUTF("TCP - 哈哈哈");
+>        os.flush();
+>        //3.关闭
+>        os.close();
+>        socket.close();
+>    }
+>}
+>```
+
+**TCP-server**
+
+> ```java
+> public class Server {
+>     static final int port = 8888;
+> 
+>     public static void main(String[] args) throws IOException {
+>         //1.定义服务端
+>         ServerSocket server=new ServerSocket(port);
+>         //2.阻塞式监听   Socket accept()
+>         Socket client=server.accept();
+>         //3.io操作
+>         //输入流
+>         DataInputStream is=new DataInputStream(client.getInputStream());
+>         System.out.println(is.readUTF());
+>         //4.关闭
+>         is.close();
+>     }
+> }
+> ```
+
+**UDP-client**
+
+> ```java
+> public class Client {
+>     public static void main(String[] args) throws IOException {
+>         System.out.println("-----------发送端--------------");
+>         //1.定义发送端  DatagramSocket(端口)
+>         DatagramSocket send=new DatagramSocket(8888);
+>         //2.准备数据+打包DatagramPacket(byte[] buf, int length, InetAddress address, int port)  构造数据报包，用来将长度为 length 的包发送到指定主机上的指定端口号。
+>         String str="UDP - 网络编程";
+>         byte[] arr=str.getBytes();
+>         DatagramPacket packet=new DatagramPacket(arr,arr.length, InetAddress.getLocalHost(),9999);
+>         //3.发送
+>         send.send(packet);
+>         //4.关闭
+>         send.close();
+>     }
+> }
+> ```
+
+**UDP-server**
+
+> ```java
+> public class Server {
+>     public static void main(String[] args) throws IOException {
+>         System.out.println("-----------接收端--------------");
+>         //1.定义接收端   DatagramSocket(端口)
+>         DatagramSocket receive=new DatagramSocket(9999);
+>         //2.准备字节数组进行打包
+>         byte[] arr=new byte[1024*60];
+>         //DatagramPacket(byte[] buf, int length)  构造 DatagramPacket，用来接收长度为 length 的数据包。
+>         DatagramPacket packet=new DatagramPacket(arr,arr.length);
+>         //3.接收
+>         receive.receive(packet);
+>       /*
+>        * 4.处理数据
+>        *  byte[] getData() 返回数据缓冲区。
+>          int getLength() 返回将要发送或接收到的数据的长度。
+>        */
+>         byte[] datas=packet.getData();
+>         int len=packet.getLength();
+>         System.out.println(new String(datas,0,len).length());
+>         System.out.println(new String(arr).length());
+>         //5.关闭
+>         receive.close();
+>     }
+> }
+> ```
+
+### 5.2 socket
 
 > **什么是socket ? **
 >
@@ -2550,7 +2654,7 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 >
 > ![](img/20190718154523875.png)
 
-### 5.2 IO----
+### 5.3 IO----
 
 > liunx的io模型是5种,这里只对Java的3种io模型进行简单介绍
 >
@@ -2558,11 +2662,11 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 >
 > 参考文章 : https://juejin.im/post/6844903664256024584  https://juejin.im/post/6844903975448215560
 
-#### 5.2.1 同步阻塞I/O(BIO)
+#### 5.3.1 同步阻塞I/O(BIO)
 
 > 
 
-#### 5.2.2 同步非阻塞I/O(NIO)
+#### 5.3.2 同步非阻塞I/O(NIO)
 
 ![](img/overview-selectors.png)<img src="img/overview-channels-buffers.png" style="zoom:140%;" />
 
@@ -2614,15 +2718,15 @@ aFile.close();
 
 
 
-#### 5.2.3 异步非阻塞I/O(AIO/NIO2)
+#### 5.3.3 异步非阻塞I/O(AIO/NIO2)
 
 > 
 
-### 5.3 netty----
+### 5.4 netty----
 
 > Netty是 *一个异步事件驱动的网络应用程序框架，*用于快速开发可维护的高性能协议服务器和客户端。Netty是一个NIO客户端服务器框架，可以快速轻松地开发网络应用程序，例如协议服务器和客户端。它极大地简化了TCP和UDP套接字服务器等网络编程。
 
-### 5.4 音视频通信----
+### 5.5 音视频通信----
 
 > 上面知道服务器之间的通信可以利用socket根据特定协议来进行通信,但是对于视频音频这类信息通信到底该选用哪一种协议呢?
 >
@@ -2632,7 +2736,7 @@ aFile.close();
 >
 > 网络实时传输协议 : RTSP/RTMP/SRT/RTP
 
-### 5.5 系统学习TCP
+### 5.6 系统学习TCP
 
 > 视频 : https://www.bilibili.com/video/BV1Mx411v7rJ?p=1
 
