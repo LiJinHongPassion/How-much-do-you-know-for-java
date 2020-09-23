@@ -2977,7 +2977,7 @@ aFile.close();
 
 > 空间索引是对空间数据类型的字段建立的索引，MYSQL中的空间数据类型有4种，分别是GEOMETRY、POINT、LINESTRING、POLYGON。MYSQL使用SPATIAL关键字进行扩展，使得能够用于创建正规索引类型的语法创建空间索引。创建空间索引的列，必须将其声明为NOT NULL，空间索引只能在存储引擎为MYISAM的表中创建
 
-#### **6.2.2 索引数据结构**
+#### 7.2.2 索引数据结构**
 
 - 二叉树 : 存在极端问题, **树线性化**
 - 红黑树 : 当数据量千万级的时候, **树的深度**在20次左右, 比较耗时
@@ -3163,20 +3163,26 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 >
 > [快照读和当前读](https://www.jianshu.com/p/27352449bcc0)
 
-#### 7.4.1 快照读和当前读
+#### 7.4.1 Innodb和MyISAM
+
+> MyISAM仅仅支持表锁
+>
+> Innodb支持表锁和行锁
+
+#### 7.4.2 快照读和当前读
 
 > **注意：在数据库隔离级别为可重复读和读已提交，以下结论才生效**
 
-##### 7.4.1.1、select快照读（照片）
+##### 7.4.2.1、select快照读（照片）
 
-##### 7.4.1.2、update、insert、delete 当前读
+##### 7.4.2.2、update、insert、delete 当前读
 
 >   当你执行这几个操作的时候默认会执行当前读，也就是会读取最新的记录，也就是别的事务提交的数据你也可以看到，这样很好理解啊，假设你要update一个记录，另一个事务已经delete这条数据并且commit了，这样不是会产生冲突吗，所以你update的时候肯定要知道最新的信息啊。
 >
 >   我在这里介绍一下update的过程吧，首先会执行当前读，然后把返回的数据加锁，之后执行update。加锁是防止别的事务在这个时候对这条记录做什么，默认加的是排他锁，也就是你读都不可以，这样就可以保证数据不会出错了。但注意一点，就算你这里加了写锁，别的事务也还是能访问的，是不是很奇怪？数据库采取了一致性非锁定读，别的事务会去读取一个快照数据。
 >   innodb默认隔离级别是RR， 是通过MVVC来实现了，读方式有两种，执行select的时候是快照读，其余是当前读，所以，mvvc不能根本上解决幻读的情况
 
-##### 7.4.2 LBCC
+#### 7.4.3 LBCC
 
 **有哪些锁？ 如何加锁？**
 
@@ -3188,7 +3194,7 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 
 > 事务中，对某一条数据的操作的时候， 不想要别人来操作，例如订单生成等
 
-##### 7.4.3 MVCC( 快照读 -- 快照的版本号 ) - 变种的行锁
+#### 7.4.4 MVCC( 快照读 -- 快照的版本号 ) - 变种的行锁
 
 > 原理图 : https://www.processon.com/view/5d29999ee4b07917e2e09294
 >
@@ -3202,7 +3208,7 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 
 > <font color="green">[`SELECT ... FROM`](https://dev.mysql.com/doc/refman/5.7/en/select.html)是一致的读取，读取数据库的快照并且不设置锁定，除非将事务隔离级别设置为 [`SERIALIZABLE`](https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html#isolevel_serializable)。</font><font color="red">对于 [`SERIALIZABLE`](https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html#isolevel_serializable)级别，搜索会在遇到的索引记录上设置共享的`next-key locks`。但是，对于使用`唯一索引`搜索到的唯一一行记录，仅需要`index record lock`。</font>
 
-##### 7.4.4 间隙锁( 解决幻读 ) + RR隔离级别
+#### 7.4.5 间隙锁( 解决幻读 ) + RR隔离级别
 
 **什么是间隙锁？**
 
@@ -3226,7 +3232,9 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 
 > 在索引的区间内加锁
 
-##### 示例: 为什么你的insert就死锁了
+#### 示例: 为什么你的insert就死锁了
+
+> 参考文章 ： [insert死锁例子](https://blog.csdn.net/varyall/article/details/80219459)
 
 > 前段时间朋友问我为什么他的`insert`操作十分的<font color="red">慢( 他没有说明是SQL执行速度慢, 或者说是Java接口返回信息慢 )</font>, 因为它使用的是`oracle`数据库, 与MySQL有所不同, 例如`oracle`的数据库默认级别就为读已提交; 
 >
@@ -3246,91 +3254,94 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 
 > > 参考文章 : https://juejin.im/post/6867182249876389895#heading-16
 >
-> - `MySQL`有哪些锁 ?
+
+
+#####  `MySQL`有哪些锁 ?
+
+
 >
->   > 参考文章 : [innodb的锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locking.html)
->   >
->   > 下面列举了其中三种锁
+>> 参考文章 : [innodb的锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locking.html)
+>>
+>> 下面列举了其中三种锁，详情看`7.4.3章节`
 >
->   > 1. record lock：记录锁，也就是仅仅锁着单独的一行
->   > 2. gap lock：区间锁，仅仅锁住一个区间（注意这里的区间都是开区间，也就 是不包括边界值，至于为什么这么定义？`innodb`官方定义的）
->   > 3. next-key lock：`record lock+gap lock`，所以`next-key lock`也就半开半闭区间，且是下界开，上界闭。(为什么这么定义？`innodb`官方定义的)
+>> 1. record lock：记录锁，也就是仅仅锁着单独的一行
+>> 2. gap lock：区间锁，仅仅锁住一个区间（注意这里的区间都是开区间，也就 是不包括边界值，至于为什么这么定义？`innodb`官方定义的）
+>> 3. next-key lock：`record lock+gap lock`，所以`next-key lock`也就半开半闭区间，且是下界开，上界闭。(为什么这么定义？`innodb`官方定义的)
 >
-> - `CRUD`会加什么锁 ?
->
->   > 参考文章 : [查看innodb何种情况下使用何种锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locks-set.html)
->
->   > ```txt
->   > For `SELECT ... FOR UPDATE` or `SELECT ... LOCK IN SHARE MODE`, locks are acquired for scanned rows, and expected to be released for rows that do not qualify for inclusion in the result set (for example, if they do not meet the criteria given in the `WHERE` clause). However, in some cases, rows might not be unlocked immediately because the relationship between a result row and its original source is lost during query execution. For example, in a `UNION`, scanned (and locked) rows from a table might be inserted into a temporary table before evaluation whether they qualify for the result set. In this circumstance, the relationship of the rows in the temporary table to the rows in the original table is lost and the latter rows are not unlocked until the end of query execution.
->   > ```
->   >
->   > 对于[`SELECT ... FOR UPDATE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)或 [`SELECT ... LOCK IN SHARE MODE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)，将为扫描的行获取锁，并预期将释放不符合包含在结果集中的行（例如，如果它们不符合该`WHERE`子句中给出的条件）。但是，在某些情况下，行可能不会立即解锁，因为结果行与其原始源之间的关系在查询执行期间会丢失。例如，在 [`UNION`](https://dev.mysql.com/doc/refman/5.7/en/union.html)，从表中扫描（并锁定）的行可能会在评估它们是否符合结果集之前插入到临时表中。在这种情况下，临时表中的行与原始表中的行之间的关系将丢失，并且直到查询执行结束后，后行才被解锁。
->
->   > ```txt
->   > `SELECT ... LOCK IN SHARE MODE` sets shared next-key locks on all index records the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
->   > ```
->   >
->   > [`SELECT ... LOCK IN SHARE MODE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)在搜索遇到的所有索引记录上设置共享的`next-key locks`。但是，对于使用唯一索引锁定行以搜索唯一行的语句，仅需要`index record lock`。
->   > ```txt
->   > `SELECT ... FOR UPDATE` sets an exclusive next-key lock on every record the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
->   > 
->   > For index records the search encounters, `SELECT ... FOR UPDATE` blocks other sessions from doing `SELECT ... LOCK IN SHARE MODE` or from reading in certain transaction isolation levels. Consistent reads ignore any locks set on the records that exist in the read view.
->   > ```
->   >
->   > [`SELECT ... FOR UPDATE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)在搜索遇到的每条记录上设置排他的`next-key lock`。但是，对于使用唯一索引锁定行以搜索唯一行的语句，仅需要`index record lock`。
->   >
->   > 对于搜索遇到的索引记录， [`SELECT ... FOR UPDATE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)阻止其他会话执行 [`SELECT ... LOCK IN SHARE MODE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)或读取某些事务隔离级别。一致的读取将忽略读取视图中存在的记录上设置的任何锁定。
-> 
-> 
-> - `CRUD`会加什么锁 ?
+>- 手动加锁的作用
 >
 >  > 参考文章 : [查看innodb何种情况下使用何种锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locks-set.html)
->   
+>
 >  > ```txt
->   > SELECT ... FROM is a consistent read, reading a snapshot of the database and setting no locks unless the transaction isolation level is set to SERIALIZABLE. For SERIALIZABLE level, the search sets shared next-key locks on the index records it encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
->   > ```
-> ><font color="green">[`SELECT ... FROM`](https://dev.mysql.com/doc/refman/5.7/en/select.html)是一致的读取，读取数据库的快照并且不设置锁定，除非将事务隔离级别设置为 [`SERIALIZABLE`](https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html#isolevel_serializable)。</font><font color="red">对于 [`SERIALIZABLE`](https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html#isolevel_serializable)级别，搜索会在遇到的索引记录上设置共享的`next-key locks`。但是，对于使用`唯一索引`搜索到的唯一一行记录，仅需要`index record lock`。</font>
-> 
->   > ```txt
->   > UPDATE ... WHERE ... sets an exclusive next-key lock on every record the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
->   > ```
-> >
->   > <font color="red">[`UPDATE ... WHERE ...`](https://dev.mysql.com/doc/refman/5.7/en/update.html)在搜索遇到的每条记录上设置排他的`next-key lock`。但是，对于使用`唯一索引`搜索到的唯一一行记录，仅需要`index record lock`。</font>
-> 
->   > ```txt
->   > DELETE FROM ... WHERE ... sets an exclusive next-key lock on every record the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
->   > ```
-> >
->   > <font color="red">[`DELETE FROM ... WHERE ...`](https://dev.mysql.com/doc/refman/5.7/en/delete.html)在搜索遇到的每条记录上设置排他的`next-key lock`。但是，对于使用`唯一索引`搜索到的唯一一行记录，仅需要`index record lock`。</font>
-> 
->   > ```txt
->   > INSERT sets an exclusive lock on the inserted row. This lock is an index-record lock, not a next-key lock (that is, there is no gap lock) and does not prevent other sessions from inserting into the gap before the inserted row.
->   > ```
->   >
->   > <font color="blue">[`INSERT`](https://dev.mysql.com/doc/refman/5.7/en/insert.html)在插入的行上设置排他锁。该锁是`index record lock`，不是`next-key lock`（即没有`gap lock`），并且不会阻止其他会话插入到插入行之前的间隙中。</font>
->   >
->   > 在插入行之前，设置了一种称为插入意图间隙锁的间隙锁。此锁以这种方式发出信号，表明要插入的意图是：如果多个事务未插入间隙中的相同位置，则不必等待彼此插入的多个事务。假设有索引记录，其值分别为4和7。分别尝试插入5和6的值的每个事务在获得插入行的排他锁之前，都使用插入意图锁来锁定4和7之间的间隙，但是没有彼此阻塞，因为行没有冲突。
-> 
-> 
-> - `MySQL`的死锁是什么样子 ? 
-> 
->  > 参考文章 : [InnoDB中的死锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-deadlocks.html)
+>  > For `SELECT ... FOR UPDATE` or `SELECT ... LOCK IN SHARE MODE`, locks are acquired for scanned rows, and expected to be released for rows that do not qualify for inclusion in the result set (for example, if they do not meet the criteria given in the `WHERE` clause). However, in some cases, rows might not be unlocked immediately because the relationship between a result row and its original source is lost during query execution. For example, in a `UNION`, scanned (and locked) rows from a table might be inserted into a temporary table before evaluation whether they qualify for the result set. In this circumstance, the relationship of the rows in the temporary table to the rows in the original table is lost and the latter rows are not unlocked until the end of query execution.
+>  > ```
 >  >
->   > 死锁是一种情况，不同的事务无法继续进行，因为每个**事务**持有另一个事务需要的锁。因为两个事务都在等待一个资源变得可用，所以都不会释放它持有的锁。
+>  > 对于[`SELECT ... FOR UPDATE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)或 [`SELECT ... LOCK IN SHARE MODE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)，将为扫描的行获取锁，并预期将释放不符合包含在结果集中的行（例如，如果它们不符合该`WHERE`子句中给出的条件）。但是，在某些情况下，行可能不会立即解锁，因为结果行与其原始源之间的关系在查询执行期间会丢失。例如，在 [`UNION`](https://dev.mysql.com/doc/refman/5.7/en/union.html)，从表中扫描（并锁定）的行可能会在评估它们是否符合结果集之前插入到临时表中。在这种情况下，临时表中的行与原始表中的行之间的关系将丢失，并且直到查询执行结束后，后行才被解锁。
+>
+>  > ```txt
+>  > `SELECT ... LOCK IN SHARE MODE` sets shared next-key locks on all index records the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
+>  > ```
 >  >
->   > > 注意： 这里说的是事务，上面对CRUD进行了阐述，由一条CRUD组成的事务是不会造成死锁问题的
->   
->   > |                            事务1                             |               事务2                |
->   > | :----------------------------------------------------------: | :--------------------------------: |
->   > |                           开始执行                           |              开始执行              |
->   > | update * from table where id > 100  <br />这里设置的是排他的`next-key lock`， 对100以上的ID进行加锁 |                                    |
->   > |                                                              | update * from table where id > 100 |
->   > |                                                              |                                    |
->   > |                                                              |                                    |
->   > |                                                              |                                    |
->   > |                                                              |                                    |
->   >
->   > 
+>  > [`SELECT ... LOCK IN SHARE MODE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)在搜索遇到的所有索引记录上设置共享的`next-key locks`。但是，对于使用唯一索引锁定行以搜索唯一行的语句，仅需要`index record lock`。
+>  > ```txt
+>  > `SELECT ... FOR UPDATE` sets an exclusive next-key lock on every record the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
+>  > 
+>  > For index records the search encounters, `SELECT ... FOR UPDATE` blocks other sessions from doing `SELECT ... LOCK IN SHARE MODE` or from reading in certain transaction isolation levels. Consistent reads ignore any locks set on the records that exist in the read view.
+>  > ```
+>  >
+>  > [`SELECT ... FOR UPDATE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)在搜索遇到的每条记录上设置排他的`next-key lock`。但是，对于使用唯一索引锁定行以搜索唯一行的语句，仅需要`index record lock`。
+>  >
+>  > 对于搜索遇到的索引记录， [`SELECT ... FOR UPDATE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)阻止其他会话执行 [`SELECT ... LOCK IN SHARE MODE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)或读取某些事务隔离级别。一致的读取将忽略读取视图中存在的记录上设置的任何锁定。
+>
+>
+>- `CRUD`会加什么锁 ?
+>
+> > 参考文章 : [查看innodb何种情况下使用何种锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locks-set.html)
+>
+> > ```txt
+>  > SELECT ... FROM is a consistent read, reading a snapshot of the database and setting no locks unless the transaction isolation level is set to SERIALIZABLE. For SERIALIZABLE level, the search sets shared next-key locks on the index records it encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
+>  > ```
+>><font color="green">[`SELECT ... FROM`](https://dev.mysql.com/doc/refman/5.7/en/select.html)是一致的读取，读取数据库的快照并且不设置锁定，除非将事务隔离级别设置为 [`SERIALIZABLE`](https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html#isolevel_serializable)。</font><font color="red">对于 [`SERIALIZABLE`](https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html#isolevel_serializable)级别，搜索会在遇到的索引记录上设置共享的`next-key locks`。但是，对于使用`唯一索引`搜索到的唯一一行记录，仅需要`index record lock`。</font>
+>
+>  > ```txt
+>  > UPDATE ... WHERE ... sets an exclusive next-key lock on every record the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
+>  > ```
+>>
+>  > <font color="red">[`UPDATE ... WHERE ...`](https://dev.mysql.com/doc/refman/5.7/en/update.html)在搜索遇到的每条记录上设置排他的`next-key lock`。但是，对于使用`唯一索引`搜索到的唯一一行记录，仅需要`index record lock`。</font>
+>
+>  > ```txt
+>  > DELETE FROM ... WHERE ... sets an exclusive next-key lock on every record the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
+>  > ```
+>>
+>  > <font color="red">[`DELETE FROM ... WHERE ...`](https://dev.mysql.com/doc/refman/5.7/en/delete.html)在搜索遇到的每条记录上设置排他的`next-key lock`。但是，对于使用`唯一索引`搜索到的唯一一行记录，仅需要`index record lock`。</font>
+>
+>  > ```txt
+>  > INSERT sets an exclusive lock on the inserted row. This lock is an index-record lock, not a next-key lock (that is, there is no gap lock) and does not prevent other sessions from inserting into the gap before the inserted row.
+>  > ```
+>  >
+>  > <font color="blue">[`INSERT`](https://dev.mysql.com/doc/refman/5.7/en/insert.html)在插入的行上设置排他锁。该锁是`index record lock`，不是`next-key lock`（即没有`gap lock`），并且不会阻止其他会话插入到插入行之前的间隙中。</font>
+>  >
+>  > 在插入行之前，设置了一种称为插入意图间隙锁的间隙锁。此锁以这种方式发出信号，表明要插入的意图是：如果多个事务未插入间隙中的相同位置，则不必等待彼此插入的多个事务。假设有索引记录，其值分别为4和7。分别尝试插入5和6的值的每个事务在获得插入行的排他锁之前，都使用插入意图锁来锁定4和7之间的间隙，但是没有彼此阻塞，因为行没有冲突。
+
+
+##### `MySQL`的死锁是什么样子 ? 
+
+> > 参考文章 : [InnoDB中的死锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-deadlocks.html)
+> >
+>  > 死锁是一种情况，不同的事务无法继续进行，因为每个**事务**持有另一个事务需要的锁。因为两个事务都在等待一个资源变得可用，所以都不会释放它持有的锁。
+> >
+>  > > 注意： 这里说的是事务，上面对CRUD进行了阐述，由一条CRUD组成的事务是不会造成死锁问题的
+>
+>  > |                            事务1                             |                            事务2                             |
+>  > | :----------------------------------------------------------: | :----------------------------------------------------------: |
+>  > |                         开始执行事务                         |                         开始执行事务                         |
+>  > | select * from table where id = 100 for update<br />对id=100的数据加上写锁，就会排斥其他的读写锁 | select * from table where id = 200<br />对id=200的数据加上写锁，就会排斥其他的读写锁 |
+>  > | select * from table where id = 200<br />因为事务2锁住了该条记录，事务1在这里就会等待获取锁，事务1阻塞 |                                                              |
+>  > |                                                              |                                                              |
+>  > |                                                              | select * from table where id = 100<br />因为事务1锁住了该条记录，事务2在这里就会等待获取锁，事务2阻塞 |
+>  > |                             ...                              |                             ...                              |
+>  >
+>  > 上述例子列举了发生死锁的状况之一
 
 
 ### 7.5 左连接、右连接、内连接
