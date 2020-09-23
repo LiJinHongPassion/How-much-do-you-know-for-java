@@ -4047,7 +4047,7 @@ Redis默认每隔100ms随机抽取一些设置了过期时间的key，检查是�
 
 > **理解记忆 :** <font color="red">加载class, 验证class信息是否正确, 准备静态变量的内存空间, 将符号引用解析为直接引用, 最后初始化class,对class赋值和静态代码初始化</font>
 
-#### 9.4.3  四种类加器
+#### 9.4.3  四种类加载器
 
 >BootstrapClassLoader ( 启动类加载器 -- C语言编写的 )
 >		|\_(加载 JDK/JRE/LIB  java.* 路径的文件)
@@ -4075,6 +4075,12 @@ sun.misc.Launcher$AppClassLoader@18b4aac2
 sun.misc.Launcher$ExtClassLoader@1b6d3586
 null
 ```
+
+#### 9.4.4 自定义类加载器
+
+> 建议阅读这篇文章 : https://juejin.im/post/6844903518105501703
+
+
 
 ### 9.5 类加载机制
 
