@@ -2602,7 +2602,7 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 >    public static void main(String[] args) throws IOException {
 >        //1.定义客户端 Socket
 >        Socket socket = new Socket(ip,port);//ip ->服务器的ip   端口:服务端的端口号
->        //2.io
+>        //2.bio
 >        //获取输出流   OutputStream getOutputStream()   返回此套接字的输出流。
 >        DataOutputStream os=new DataOutputStream(socket.getOutputStream());
 >        os.writeUTF("TCP - 哈哈哈");
@@ -2625,7 +2625,7 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 >         ServerSocket server=new ServerSocket(port);
 >         //2.阻塞式监听   Socket accept()
 >         Socket client=server.accept();
->         //3.io操作
+>         //3.bio操作
 >         //输入流
 >         DataInputStream is=new DataInputStream(client.getInputStream());
 >         System.out.println(is.readUTF());
@@ -4807,6 +4807,10 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 
 ### 11.4 消息队列
 
+#### 11.4.1 手写消息队列
+
+> [示例代码](./代码/消息队列/codeAntMQ)
+
 ### API网关
 
 
@@ -5468,6 +5472,10 @@ public class QuickSort {
 ### 13.8 一致性Hash算法
 
 > 视频 ： https://www.bilibili.com/video/BV1Hs411j73w?from=search&seid=4793005036745924355
+
+### 13.9 雪花算法
+
+
 
 ---
 
