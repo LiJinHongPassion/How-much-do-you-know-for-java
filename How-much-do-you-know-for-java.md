@@ -321,8 +321,6 @@ public @interface CherryAnnotation {
 > >
 > > 3、内部类：属于外部类，且不能被继承
 
-### 1.13 枚举类-----
-
 ---
 
 <div STYLE="page-break-after: always;"></div>
