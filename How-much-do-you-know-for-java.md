@@ -334,6 +334,14 @@ public @interface CherryAnnotation {
 
 > **Java7：** 数组 + 链表
 > **Java8：** 数组 + 链表 + 红黑树 （链表中的元素超过了 8 个以后，会将链表转换为红黑树）
+>
+> 	初始容量16，扩容*2
+> 	数据结构：数组+单向链表/红黑树
+> 	线程不安全，允许null键null值
+> 	key不重复，不保证顺序
+> 	最大容量2的30次方
+> 	容量大于64，且链表长度达到8时树形化。降到6时链化。
+> 	容量达到容量*负载因子（默认0.75）时扩容
 
 #### 2.1.1 <font color="red">为什么要重写equals()和hashCode()</font>
 
@@ -2886,6 +2894,10 @@ aFile.close();
 >
 > MySQL知识图谱 : https://www.processon.com/special/template/5e5b9831e4b0541c5e154fab#map
 
+### 三范式
+	第一范式：数据库表中的所有字段值都是不可分解的原子值
+	第二范式：没有部分依赖，一张数据表中的任何非主键字段都全部依赖于主键字段，没有任何非主键字段只依赖于主键字段的一部分
+	第三范式：没有传递依赖，数据表的任何非主键字段之间都不产生函数依赖，即非主键字段之间没有依赖关系，全部只依赖于主键字段
 ### 7.1 MySQL的请求步骤
 
 >**连接管理** -> **解析优化** -> **存储引擎**
@@ -3729,6 +3741,15 @@ binlog日志有三种格式，分别为STATMENT、ROW和MIXED。
 > EXPLAIN select name,age,email from big_data where  `name` like 'alex999%' and age = 30 ;	
 > ```
 
+### 7.8 哪些情况mysql不走索引
+	1.使用<>，!=
+	2.对条件字段进行函数操作或者表达式操作
+	3.使用or
+	4.模糊查询以%开头
+	5.联合索引没有用到最左边的字段
+	6.发生了隐式的类型转换
+	7.在条件中判空
+	8.使用in和not in
 ### 7.8 分库分表-----------------
 
 > 不要为了分库分表而去分库分表, MySQL的数据量达到千万级以后,他的性能就开始逐渐下降, 这时候我们可以考虑分库分表
@@ -3887,6 +3908,21 @@ Redis默认每隔100ms随机抽取一些设置了过期时间的key，检查是�
 ### 8.7 redis持久化：RDB（快照，容易丢失数据）  / AOF（生成文件大， 数据恢复速度慢）
 
 > 参考文章 :  https://blog.csdn.net/canot/article/details/52886923?depth_1-utm_source=distribute.wap_relevant.none-task&utm_source=distribute.wap_relevant.none-task 
+
+> 1.全量同步 - RDB
+> 			通常发生在从服务器初始化的阶段，这时候需要把主服务器上所有数据都复制一份。
+> 			步骤：
+> 				①从服务器连接主服务器，并发送sync命令
+> 				②主服务器收到sync命令，开始执行BGSAVA命令生成RDB文件，同时使用缓冲区记录之后执行的所有写命令
+> 				③主服务器执行完BGSAVE命令后，向所有从服务器发送快照文件，并同时继续记录执行的所有写命令
+> 				④从服务器收到快照文件之后，丢弃所有旧数据，载入收到的快照信息
+> 				⑤主服务器发送完所有快照之后开始向从服务器发送缓冲区中记录的写命令
+> 				⑥从服务器载入完快照信息，开始接收命令请求，并执行主服务器缓冲区发送来的写命令
+>
+> 2.增量同步 - AOF
+> 		主服务器每执行一个写命令就向从服务器发送相同的写命令，从服务器接收并执行该命令
+>
+> 3.策略：主从刚开始连接，初始化时采用全量同步；之后采用增量同步；首先尽可能采用增量同步，不成功时采用全量同步
 
 
 
@@ -4494,6 +4530,7 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 >-XX:NewRatio=n:设置年轻代和年老代的比值。如:为3，表示年轻代与年老代比值为1：3，年轻代占整个年轻代年老代和的1/4
 >-XX:SurvivorRatio=n:年轻代中Eden区与两个Survivor区的比值。注意Survivor区有两个。如：3，表示Eden：Survivor=3：2，一个Survivor区占整个年轻代的1/5
 >-XX:MaxPermSize=n:设置持久代大小
+>-XX:MaxTenuringThreshold=?	新生代对象最多多少次存活移到老年代
 >
 >收集器设置
 >-XX:+UseSerialGC:设置串行收集器
@@ -5495,7 +5532,160 @@ public class QuickSort {
 
 ### 13.9 雪花算法
 
+> 文章主要摘抄自[煲煲菜的博客](https://links.jianshu.com/go?to=https%3A%2F%2Fsegmentfault.com%2Fa%2F1190000011282426)
+> 如有侵权之处请留言告知，会立即删除。
 
+> **使用场景 : 分布式系统唯一ID的生成**
+>
+> ![](img/v2-89659f2e11fdbdacd672a26b7be42068_720w.jpg)
+>
+> > 1. **1bit**，不用，因为二进制中最高位是符号位，1表示负数，0表示正数。生成的id一般都是用整数，所以最高位固定为0。
+> > 2. **41bit-时间戳**，用来记录时间戳，毫秒级。
+> >     \- 41位可以表示![2^{41}-1](https://math.jianshu.com/math?formula=2%5E%7B41%7D-1)个数字，
+> >     \- 如果只用来表示正整数（计算机中正数包含0），可以表示的数值范围是：0 至 ![2^{41}-1](https://math.jianshu.com/math?formula=2%5E%7B41%7D-1)，减1是因为可表示的数值范围是从0开始算的，而不是1。
+> >     \- 也就是说41位可以表示![2^{41}-1](https://math.jianshu.com/math?formula=2%5E%7B41%7D-1)个毫秒的值，转化成单位年则是![(2^{41}-1) / (1000 * 60 * 60 * 24 *365) = 69](https://math.jianshu.com/math?formula=(2%5E%7B41%7D-1)%20%2F%20(1000%20*%2060%20*%2060%20*%2024%20*365)%20%3D%2069)年
+> > 3. **10bit-工作机器id**，用来记录工作机器id。
+> >     \- 可以部署在![2^{10} = 1024](https://math.jianshu.com/math?formula=2%5E%7B10%7D%20%3D%201024)个节点，包括5位datacenterId和5位workerId
+> >     \- 5位（bit）可以表示的最大正整数是![2^{5}-1 = 31](https://math.jianshu.com/math?formula=2%5E%7B5%7D-1%20%3D%2031)，即可以用0、1、2、3、....31这32个数字，来表示不同的datecenterId或workerId
+> > 4. **12bit-序列号**，序列号，用来记录同毫秒内产生的不同id。
+> >     \-  12位（bit）可以表示的最大正整数是![2^{12}-1 = 4095](img/math)，即可以用0、1、2、3、....4094这4095个数字，来表示同一机器同一时间截（毫秒)内产生的4095个ID序号。
+> >
+> > 由于在Java中64bit的整数是long类型，所以在Java中SnowFlake算法生成的id就是long来存储的。
+
+> **代码示例**
+>
+> ```java
+> public class IdWorker{
+> 
+>     //下面两个每个5位，加起来就是10位的工作机器id
+>     private long workerId;    //工作id
+>     private long datacenterId;   //数据id
+>     //12位的序列号
+>     private long sequence;
+> 
+>     public IdWorker(long workerId, long datacenterId, long sequence){
+>         // sanity check for workerId
+>         if (workerId > maxWorkerId || workerId < 0) {
+>             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0",maxWorkerId));
+>         }
+>         if (datacenterId > maxDatacenterId || datacenterId < 0) {
+>             throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0",maxDatacenterId));
+>         }
+>         System.out.printf("worker starting. timestamp left shift %d, datacenter id bits %d, worker id bits %d, sequence bits %d, workerid %d",
+>                 timestampLeftShift, datacenterIdBits, workerIdBits, sequenceBits, workerId);
+> 
+>         this.workerId = workerId;
+>         this.datacenterId = datacenterId;
+>         this.sequence = sequence;
+>     }
+> 
+>     //初始时间戳
+>     private long twepoch = 1288834974657L;
+> 
+>     //长度为5位
+>     private long workerIdBits = 5L;
+>     private long datacenterIdBits = 5L;
+>     //最大值
+>     private long maxWorkerId = -1L ^ (-1L << workerIdBits);
+>     private long maxDatacenterId = -1L ^ (-1L << datacenterIdBits);
+>     //序列号id长度
+>     private long sequenceBits = 12L;
+>     //序列号最大值
+>     private long sequenceMask = -1L ^ (-1L << sequenceBits);
+>     
+>     //工作id需要左移的位数，12位
+>     private long workerIdShift = sequenceBits;
+>    //数据id需要左移位数 12+5=17位
+>     private long datacenterIdShift = sequenceBits + workerIdBits;
+>     //时间戳需要左移位数 12+5+5=22位
+>     private long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
+>     
+>     //上次时间戳，初始值为负数
+>     private long lastTimestamp = -1L;
+> 
+>     public long getWorkerId(){
+>         return workerId;
+>     }
+> 
+>     public long getDatacenterId(){
+>         return datacenterId;
+>     }
+> 
+>     public long getTimestamp(){
+>         return System.currentTimeMillis();
+>     }
+> 
+>      //下一个ID生成算法
+>     public synchronized long nextId() {
+>         long timestamp = timeGen();
+> 
+>         //获取当前时间戳如果小于上次时间戳，则表示时间戳获取出现异常
+>         if (timestamp < lastTimestamp) {
+>             System.err.printf("clock is moving backwards.  Rejecting requests until %d.", lastTimestamp);
+>             throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds",
+>                     lastTimestamp - timestamp));
+>         }
+> 
+>         //获取当前时间戳如果等于上次时间戳（同一毫秒内），则在序列号加一；否则序列号赋值为0，从0开始。
+>         if (lastTimestamp == timestamp) {
+>             sequence = (sequence + 1) & sequenceMask;
+>             if (sequence == 0) {
+>                 timestamp = tilNextMillis(lastTimestamp);
+>             }
+>         } else {
+>             sequence = 0;
+>         }
+>         
+>         //将上次时间戳值刷新
+>         lastTimestamp = timestamp;
+> 
+>         /**
+>           * 返回结果：
+>           * (timestamp - twepoch) << timestampLeftShift) 表示将时间戳减去初始时间戳，再左移相应位数
+>           * (datacenterId << datacenterIdShift) 表示将数据id左移相应位数
+>           * (workerId << workerIdShift) 表示将工作id左移相应位数
+>           * | 是按位或运算符，例如：x | y，只有当x，y都为0的时候结果才为0，其它情况结果都为1。
+>           * 因为个部分只有相应位上的值有意义，其它位上都是0，所以将各部分的值进行 | 运算就能得到最终拼接好的id
+>         */
+>         return ((timestamp - twepoch) << timestampLeftShift) |
+>                 (datacenterId << datacenterIdShift) |
+>                 (workerId << workerIdShift) |
+>                 sequence;
+>     }
+> 
+>     //获取时间戳，并与上次时间戳比较
+>     private long tilNextMillis(long lastTimestamp) {
+>         long timestamp = timeGen();
+>         while (timestamp <= lastTimestamp) {
+>             timestamp = timeGen();
+>         }
+>         return timestamp;
+>     }
+> 
+>     //获取系统时间戳
+>     private long timeGen(){
+>         return System.currentTimeMillis();
+>     }
+> 
+>     //---------------测试---------------
+>     public static void main(String[] args) {
+>         IdWorker worker = new IdWorker(1,1,1);
+>         for (int i = 0; i < 30; i++) {
+>             System.out.println(worker.nextId());
+>         }
+>     }
+> }
+> ```
+
+### 13.10 遗传算法
+
+> 
+
+### 13.11 蚁群算法
+
+> 参考文章 ： https://juejin.im/post/6844903573805858830
+>
+> **使用场景 ： **分布式服务的负载均衡调度
 
 ---
 
