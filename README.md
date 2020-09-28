@@ -10,6 +10,10 @@
 - Email：1755497577@qq.com
 - GitHub：https://github.com/LiJinHongPassion
 
+> v1.0 ：本文主要对Java基础知识、Java集合、多线程、计算机网络、Redis、JVM、排序算法进行了总结
+>
+> v1.1 ：网络编程、MySQL锁、分布式中RPC和消息队列以及对其他章节进行小篇幅的扩张
+
 ---
 
 ## 阅读方式
