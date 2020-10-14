@@ -335,6 +335,21 @@ public @interface CherryAnnotation {
 
 > Java集合分为collection和map
 
+> ArrayList   一种可以动态增长和缩减的索引序列
+> LinkedList   一种可以在任何位置进行高效插入和删除操作的有序序列
+> ArrayDeque   一种用循环数组实现的双端队列
+> HashSet   一种没有重复元素的无序集合
+> TreeSet   一种有序集
+> EnumSet   一种包含枚举类型值的集合
+> LinkedHashSet   一种可以记住元素插入次序的集
+> PriorityQueue   一种允许高效删除最小元素的集合
+> HashMap   一种存储键/值关联的数据结构
+> TreeMap   一种键值有序排列的映射表
+> EnumMap   一种键值属于枚举类型的映射表
+> LinkedHashMap   一种可以记住键/值项添加次序的映射表
+> WeakHashMap   一种其值无用武之地后可以被垃圾回收期回收的映射表
+> IdentityHashMap   一种用==而不是用equals比较键值的映射表
+
 ### 2.1 HashMap
 
 > **实现原理：** HashMap 基于 Hash 算法实现的，我们通过 put(key,value)存储，get(key)来获取。当传入 key 时，HashMap 会根据 key. hashCode() 计算出 hash 值，根据 hash 值将 value 保存在 bucket 里。当计算出的 hash 值相同时，我们称之为 hash 冲突，HashMap 的做法是用链表和红黑树存储相同 hash 值的 value。当 hash 冲突的个数比较少时，使用链表否则使用红黑树。 
@@ -4890,6 +4905,8 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 ##### 11.3.2.4 bio / nio / netty	---
 
 ##### 11.3.2.5 jdk动态代理 / cglib动态代理----
+
+##### 11.3.2.6 心跳机制
 
 
 
