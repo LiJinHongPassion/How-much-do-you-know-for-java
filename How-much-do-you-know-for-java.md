@@ -605,22 +605,20 @@ public @interface CherryAnnotation {
 > list.add(obj);
 > ```
 >
-> 
->
 > ```java
-> private static final int DEFAULT_CAPACITY = 10;
+>private static final int DEFAULT_CAPACITY = 10;
 > public boolean add(E e) {
->     ensureCapacityInternal(size + 1);  // Increments modCount!!
->     elementData[size++] = e;
+>  ensureCapacityInternal(size + 1);  // Increments modCount!!
+>  elementData[size++] = e;
 >     return true;
-> }
-> private static int calculateCapacity(Object[] elementData, int minCapacity) {
->     if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
->         return Math.max(DEFAULT_CAPACITY, minCapacity);
+>    }
+>    private static int calculateCapacity(Object[] elementData, int minCapacity) {
+>  if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
+>      return Math.max(DEFAULT_CAPACITY, minCapacity);
 >     }
 >     return minCapacity;
-> }
-> ```
+>    }
+>    ```
 
 **扩容**
 
