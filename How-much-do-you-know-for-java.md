@@ -378,7 +378,7 @@ public @interface CherryAnnotation {
 > **Java7：** **分段**数组 + 链表
 > **Java8：** 数组 + 链表 + 红黑树 （链表中的元素超过了 8 个以后，会将链表转换为红黑树）
 
-#### 2.2.1 如何实现线程安全的 ( 源码阅读 )-------------------------
+#### 2.2.1 如何实现线程安全的 ( 源码阅读 )
 
 > 研究一个数据集合的安全性, 其实也就是从他的数据结构的`Get`和`Put`方法看, 是否保证了线程安全.
 >
@@ -5572,7 +5572,9 @@ public class QuickSort {
 
 >  参考视频 : https://www.bilibili.com/video/BV1Px411z7Yo
 
-### 13.8 一致性Hash算法
+### 13.8 Hash算法
+
+##### 13.8.2 一致性Hash算法
 
 > 视频 ： https://www.bilibili.com/video/BV1Hs411j73w?from=search&seid=4793005036745924355
 
@@ -5880,7 +5882,11 @@ public class QuickSort {
 
 #### JDBC连接池源码
 
+## 疑难杂症
 
+#### 超大文件导入数据库（非直接导入数据库）
+
+> [参考网址](https://blog.csdn.net/xiangyong58/article/details/51702252?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.add_param_isCf&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.add_param_isCf)
 
 
 
