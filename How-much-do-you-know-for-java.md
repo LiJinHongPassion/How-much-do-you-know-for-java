@@ -2406,6 +2406,8 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 <div STYLE="page-break-after: always;"></div>
 ## 4.计算机网络
 
+![3864529920-56fde9b5acc5a](img/3864529920-56fde9b5acc5a.gif)
+
 ![](img/16c47ba8756beeb3)
 
 **<font color="red">什么是协议</font>**
