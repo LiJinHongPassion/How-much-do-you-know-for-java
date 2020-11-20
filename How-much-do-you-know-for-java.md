@@ -2834,19 +2834,209 @@ JDK1.4时，提供了很多进行异步I/O开发的API和类库，主要的类�
 >   - ShortBuffer
 >   - MappedByteBuffer
 
+buffer是缓冲区， 本质与其他缓冲(如BufferInputStream)一样， 里面都是字节数组(byte[])， 它在于控制一次性从数据源(磁盘等)读取多个字节，减少与数据源的交互次数，从而提高性能。
+
+　　 a. buffer有几个重要属性：
+    　　capacity: 缓冲区数组的长度
+    　　position: 下一个要操作元素的位置
+    　　limit: 下一个不可操作元素的位置
+    　　mark: 用于记录当前position的前一个位置或者默认是0
+
+　　 b. ByteBuffer几个重要方法
+
+```java
+// 创建缓冲区
+ByteBuffer allocate(int capacity);  //在堆中创建缓冲区
+ByteBuffer allocateDirect(int capacity); //在堆外内存中创建缓冲区
+
+// 存数据进buffer, position位置会随着数据的增加而变化
+ByteBuffer put(byte b);
+ByteBuffer put(byte[] src);
+
+// 读取buffer中的缓冲数据
+byte get();  //读取position对应的位置的数据， 并"移动"position (+1)
+
+// 将position设置为0， 一般用于读操作之后的写操作
+Buffer flip();
+
+// 判断是否还有元素可操作，(position<limit)
+boolean hasRemaining();
+
+// 清空数据
+Buffer clear();
+
+// 使用mark标记position的位置
+Buffer mark();
+
+// 重置position, 将position变为之前mark的操作
+Buffer reset();
+```
+
+　c. 注意事项
+    在调用#put(byte[])方法将数据存进buffer中后， 需要调用#flip()方法， 将position指针移到开头， 然后才能将数据写进其他地方， 因为position表示下一个要操作的元素的位置, 操作示意图可以查看[此博文](https://www.jianshu.com/p/dd05b079e308)
+
 ##### Selectors
+
+> 选择器，用于注册各种channel感兴趣的事件, 共有4种感兴趣的事件： **OP_READ, OP_WRITE, OP_CONNECT, OP_ACCEPT**
 
 > - Selectors
 >
 > > **selector相关方法说明**
 > >
-> > selector.select()/阻塞
-> > selector.select(1000);//阻塞1000毫秒，在1000毫秒后返回selector.wakeup();//唤醒selector
-> > selector.selectNow();/l不阻塞，立马返还
+> > selector.select()//阻塞
+> > selector.select(1000);//阻塞1000毫秒，在1000毫秒后返回
+> > selector.wakeup();//唤醒selector
+> > selector.selectNow();//不阻塞，立马返还
 
-##### 示例：文件传输
+```java
+ServerSocketChannel ssc=ServerSocketChannel.open();
+ssc.configureBlocking(false); // 设置非阻塞io
+//绑定端口 backlog设为1024; 存放还没有来得及处理的客户端Socket，这个队列的容量就是backlog的含义
+ssc.socket().bind(new InetSocketAddress(8040),1024000000);
+ssc.register(selector, SelectionKey.OP_ACCEPT);
+```
 
+```java
+SocketChannel sc=ssc.accept();
+sc.configureBlocking(false);
+sc.register(selector, SelectionKey.OP_READ);
+```
 
+```java
+selector.select(); //是一个阻塞方法， 当没有感兴趣的事件时，会阻塞等待。
+selector.selectedKeys(); //返回感兴趣的所有事
+```
+
+SelectionKey **#isAcceptable(), #isReadable(), #isWritable(), #isConnectable()** 判断发生的是哪种事件。
+
+##### 示例：简单信息传递
+
+**Server**
+
+>```java
+>/**
+> * 描述:
+> *
+> * @author lijinhong
+> * @date 20.11.20
+> */
+>public class Server {
+>
+>    static Integer port = 6000;
+>
+>    public static void main(String[] args) throws IOException {
+>
+>        // channel , selector , buffer
+>        ServerSocketChannel ssc = ServerSocketChannel.open();
+>        ByteBuffer buffer = ByteBuffer.allocate(5);
+>        Selector selector = Selector.open();
+>        // 设置非阻塞io
+>        ssc.configureBlocking(false);
+>        //绑定端口 backlog设为1024
+>        ssc.socket().bind(new InetSocketAddress(port), 1024000000);
+>        ssc.register(selector, SelectionKey.OP_ACCEPT);
+>
+>
+>        while (true) {
+>            System.out.println("阻塞等待...");
+>
+>            /**
+>             * selector相关方法说明
+>             *  - selector.select()//阻塞
+>             *  - selector.select(1000);//阻塞1000毫秒，在1000毫秒后返回
+>             *  - selector.wakeup();//唤醒selector
+>             *  - selector.selectNow();//不阻塞，立马返还
+>             */
+>            selector.select(100); //阻塞等待
+>            //返回感兴趣的所有事
+>            Set<SelectionKey> selectedKeys = selector.selectedKeys();
+>            //迭代器
+>            Iterator<SelectionKey> iter = selectedKeys.iterator();
+>
+>            while (iter.hasNext()) {
+>                //  OP_READ, OP_WRITE, OP_CONNECT, OP_ACCEPT
+>                SelectionKey selectionKey = iter.next();
+>                iter.remove(); //移除被选择的通道, 防止重复处理
+>                if (selectionKey.isAcceptable()) {
+>                    ssc = (ServerSocketChannel) selectionKey.channel();
+>
+>                    // 需要注册channel
+>                    SocketChannel sc = ssc.accept();
+>                    sc.configureBlocking(false);
+>                    sc.register(selector, SelectionKey.OP_READ);
+>
+>                    System.out.println("服务端接受连接...");
+>                } else if (selectionKey.isReadable()) {
+>                    SocketChannel sc = (SocketChannel) selectionKey.channel();
+>
+>                    int len = -1;
+>
+>                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+>
+>                    while ((len = sc.read(buffer)) > 0) {
+>                        buffer.flip(); // 反转postion, position表示操作的下一个位置
+>
+>                        byte b = -1;
+>                        while (buffer.hasRemaining()) {
+>                            b = buffer.get();
+>                            baos.write(b);
+>                        }
+>
+>                        buffer.clear();
+>                    }
+>                    if (baos.size() > 0) {
+>                        System.out.println("服务端接收消息为: " + baos.toString());
+>                    }
+>                    if (len == -1) { // -1, 表示客户端主动关闭连接关闭,
+>                        System.out.println("关闭连接...");
+>                        sc.close(); // 服务端也需要关闭连接, 否则该链接仍然会可读
+>                    }
+>                }
+>            }
+>        }
+>    }
+>}
+>```
+
+**Client**
+
+> ```java
+> /**
+>  * 描述:
+>  *
+>  * @author lijinhong
+>  * @date 20.11.20
+>  */
+> public class Client {
+>     static String IP = "127.0.0.1";
+>     static Integer port = 6000;
+> 
+>     public static void main(String[] args) throws IOException, InterruptedException {
+>         SocketChannel sc=SocketChannel.open(new InetSocketAddress(IP, port));
+> 
+>         sc.configureBlocking(false); // 设置成非阻塞io
+>         ByteBuffer buffer=ByteBuffer.allocate(102400000);
+> 
+>         int i=0;
+>         while(true){
+>             System.out.println("发送消息...");
+>             buffer.clear(); //清空消息
+>             buffer.put("timfruit, 您好...".getBytes());
+> 
+>             buffer.flip(); // 将position反转至开始的位置, 用于写
+>             sc.write(buffer);
+> 
+>             i++;
+>             if(i>1){
+>                 break;
+>             }
+>             Thread.sleep(1000);
+>         }
+>         sc.socket().close();
+> //        sc.close();
+>     }
+> }
+> ```
 
 #### 5.3.3 BIO和NIO的区别
 
@@ -2896,8 +3086,6 @@ JDK1.7正式发布。它的一个比较大的亮点就是将原来的NIO类库�
 #### 窗口滑动
 
 > 参考文章 : [一篇带你读懂TCP之“滑动窗口”协议](https://juejin.im/post/6844903809995505671)
-
-
 
 ---
 
