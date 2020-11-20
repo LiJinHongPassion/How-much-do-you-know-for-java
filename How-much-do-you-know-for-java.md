@@ -8,7 +8,7 @@
 >
 > v1.1 ：网络编程、MySQL锁、分布式中RPC和消息队列以及对其他章节进行小篇幅的扩张
 >
-> v1.2 ：整理收拾未完成的Java基础
+> v1.2 ：整理收拾未完成的Java基础，IO编程
 
 ---
 
@@ -2600,11 +2600,42 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 
 
 
-### 4.4 session/cookies和token
+### 4.4 session/cookie和token
 
->session/cookies是有状态的
+>session/cookie是有状态的
 >
 >token是无状态的
+
+##### **你真的了解cookie吗**
+
+> 一个域名下可以存在多个多个cookie，每个cookie都有自己独立的属性
+
+**cookie的结构**
+
+> ![cook](img/cook.png)
+
+> **name**　　字段为一个cookie的名称。
+>
+> **value**　　字段为一个cookie的值。
+>
+> **domain**　　字段为可以访问此cookie的域名。
+>
+> 非顶级域名，如二级域名或者三级域名，设置的cookie的domain只能为顶级域名或者二级域名或者三级域名本身，不能设置其他二级域名的cookie，否则cookie无法生成。
+>
+> 顶级域名只能设置domain为顶级域名，不能设置为二级域名或者三级域名，否则cookie无法生成。
+>
+> 二级域名能读取设置了domain为顶级域名或者自身的cookie，不能读取其他二级域名domain的cookie。所以要想cookie在多个二级域名中共享，需要设置domain为顶级域名，这样就可以在所有二级域名里面或者到这个cookie的值了。
+> 顶级域名只能获取到domain设置为顶级域名的cookie，其他domain设置为二级域名的无法获取。
+>
+> **path**　　字段为可以访问此cookie的页面路径。 比如domain是abc.com,path是/test，那么只有/test路径下的页面可以读取此cookie。
+>
+> **expires/Max-Age** 　字段为此cookie超时时间。若设置其值为一个时间，那么当到达此时间后，此cookie失效。不设置的话默认值是Session，意思是cookie会和session一起失效。当浏览器关闭(不是浏览器标签页，而是整个浏览器) 后，此cookie失效。
+>
+> **Size**　　字段 此cookie大小。
+>
+> **http**　　字段  cookie的httponly属性。若此属性为true，则只有在http请求头中会带有此cookie的信息，而不能通过document.cookie来访问此cookie。
+>
+> **secure**　　 字段 设置是否只能通过https来传递此条cookie
 
 ---
 
@@ -2736,9 +2767,50 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 
 > java中IO包下的
 
+![image-20201120094731211](img/image-20201120094731211.png)
+
+**缺陷：**
+
+> 阻塞模型，**客户端的性能会影响阻塞时间**，当客户端的读写速度十分的缓慢，则阻塞时间越长
+>
+> 线程开销大。**一个客户端就需要新建一个线程**
+
+**注意：**有一种伪异步BIO的模型，就是利用线程池和任务队列，线程池固定线程数量，任务队列存储任务，但是本质通信还是BIO，还是会存在同步阻塞的问题
+
+---
+
+**BIO编程流程梳理**
+
+> 1) 服务器端启动一个ServerSocket
+> 2) 客户端启动Socket对服务器进行通信，默认情况下服务器端需要对每个客户建立一个线程与之通讯
+> 3)客户端发出请求后,先咨询服务器是否有线程响应，如果没有则会等待，或者被拒绝
+> 4)如果有响应，客户端线程会等待请求结束后，在继续执行
+
 #### 5.3.2 同步非阻塞I/O(NIO)
 
-![](img/overview-selectors.png)<img src="img/overview-channels-buffers.png" style="zoom:140%;" />
+JDK1.4时，提供了很多进行异步I/O开发的API和类库，主要的类和接口如下:
+
+> - 进行异步I/O操作的缓冲区 ByteBuffer等;
+> - 进行异步1/O操作的管道Pipe;
+> - 进行各种IO操作（异步或者同步)的 Channel，包括 ServerSocketChannel 和SocketChannel;
+> - 多种字符集的编码能力和解码能力;
+> - 实现非阻塞I/O操作的多路复用器selector;
+> - 基于流行的Perl 实现的正则表达式类库;
+> - 文件通道FileChannel。
+
+**缺陷**
+
+> - 没有统一的文件属性（例如读写权限);
+> - API能力比较弱，例如目录的级联创建和递归遍历，往往需要自己实现;底层存储系统的一些高级API无法使用;
+> - 所有的文件操作都是同步阻塞调用，不支持异步文件读写操作。
+
+> 一个线程维护多个连接，多路复用
+
+
+
+![image-20201120100643009](img/image-20201120100643009.png)
+
+![](img/overview-selectors.png)
 
 ##### Channels
 
@@ -2747,28 +2819,8 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 >   - DatagramChannel 能通过UDP读写网络中的数据。
 >   - SocketChannel 能通过TCP读写网络中的数据。
 >   - ServerSocketChannel可以监听新进来的TCP连接，像Web服务器那样。对每一个新进来的连接都会创建一个SocketChannel。
-
-```java
-RandomAccessFile aFile = new RandomAccessFile("data/nio-data.txt", "rw");
-FileChannel inChannel = aFile.getChannel();
-
-ByteBuffer buf = ByteBuffer.allocate(48);
-
-int bytesRead = inChannel.read(buf);
-while (bytesRead != -1) {
-
-    System.out.println("Read " + bytesRead);
-    buf.flip();
-
-    while(buf.hasRemaining()){
-    	System.out.print((char) buf.get());
-    }
-
-    buf.clear();
-    bytesRead = inChannel.read(buf);
-}
-aFile.close();
-```
+>
+> > NIO中的ServerSocketChannel 功能类似ServerSocket，SocketChannel功能类似Socket
 
 ##### Buffers
 
@@ -2785,12 +2837,33 @@ aFile.close();
 ##### Selectors
 
 > - Selectors
+>
+> > **selector相关方法说明**
+> >
+> > selector.select()/阻塞
+> > selector.select(1000);//阻塞1000毫秒，在1000毫秒后返回selector.wakeup();//唤醒selector
+> > selector.selectNow();/l不阻塞，立马返还
+
+##### 示例：文件传输
 
 
 
-#### 5.3.3 异步非阻塞I/O(AIO/NIO2)
+#### 5.3.3 BIO和NIO的区别
 
-> 
+> 1) BIO以流的方式处理数据,而NIO 以块的方式处理数据,块IO的效率比流IO高很多
+>
+> 2) BIO是阻塞的，NIO 则是非阻塞的
+>
+> 3)BIO基于字节流和字符流进行操作，而NIO 基于Channel(通道)和Buffer(缓冲区)进行操作，数据总是从通道读取到缓冲区中，或者从缓冲区写入到通道中。Selector(选择器)用于监听多个通道的事件（比如:连接请求，数据到达等），因此使用单个线程就可以监听多个客户端通道
+
+#### 5.3.4 异步非阻塞I/O(AIO/NIO2)
+
+JDK1.7正式发布。它的一个比较大的亮点就是将原来的NIO类库进行了升级，被称为NIO2.0。NIO2.0由JSR-203演进而来，它主要提供了如下三个方面的改进。
+
+> - 提供能够批量获取文件属性的API，这些API具有平台无关性，不与特性的文件系统相耦合。另外它还提供了标准文件系统的SPI，供各个服务提供商扩展实现;
+>
+> - 提供AIO功能，支持基于文件的异步IO操作和针对网络套接字的异步操作;
+> - 完成JSR-51定义的通道功能，包括对配置和多播数据报的支持等。
 
 ### 5.4 netty----
 
@@ -5991,6 +6064,20 @@ public class QuickSort {
 
 > [参考网址](https://blog.csdn.net/xiangyong58/article/details/51702252?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.add_param_isCf&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.add_param_isCf)
 
+### Netty
+
+> 书籍：《Netty权威指南》第2版 -- 李林锋
+
+- 为什么选择 Netty
+- 说说业务中，Netty 的使用场景
+- 原生的 NIO 在 JDK 1.7 版本存在 epoll bug
+- 什么是TCP 粘包/拆包
+- TCP粘包/拆包的解决办法
+- Netty 线程模型
+- 说说 Netty 的零拷贝
+- Netty 内部执行流程
+- Netty 重连实现
+
 
 
 ---
@@ -6084,3 +6171,149 @@ public class QuickSort {
 - 适配器
 - 责任链
 - 建造者w
+
+
+
+
+
+
+
+### Spring
+
+- BeanFactory 和 ApplicationContext 有什么区别
+- Spring Bean 的生命周期 ： https://juejin.im/post/6844904065457979405
+- Spring IOC 如何实现
+- 说说 Spring AOP
+- Spring AOP 实现原理
+- 动态代理（cglib 与 JDK）
+- Spring 事务实现方式
+- Spring 事务底层原理
+- 如何自定义注解实现功能
+- Spring MVC 运行流程
+- Spring MVC 启动流程
+- Spring 的单例实现原理
+- Spring 框架中用到了哪些设计模式
+- Spring 其他产品（Srping Boot、Spring Cloud、Spring Secuirity、Spring Data、Spring AMQP 等）
+
+### Netty
+
+- 为什么选择 Netty
+- 说说业务中，Netty 的使用场景
+- 原生的 NIO 在 JDK 1.7 版本存在 epoll bug
+- 什么是TCP 粘包/拆包
+- TCP粘包/拆包的解决办法
+- Netty 线程模型
+- 说说 Netty 的零拷贝
+- Netty 内部执行流程
+- Netty 重连实现
+
+## 微服务篇
+
+### 微服务
+
+- 前后端分离是如何做的
+- 微服务哪些框架
+- 你怎么理解 RPC 框架
+- 说说 RPC 的实现原理
+- 说说 Dubbo 的实现原理
+- 你怎么理解 RESTful
+- 说说如何设计一个良好的 API
+- 如何理解 RESTful API 的幂等性
+- 如何保证接口的幂等性
+- 说说 CAP 定理、 BASE 理论
+- 怎么考虑数据一致性问题
+- 说说最终一致性的实现方案
+- 你怎么看待微服务
+- 微服务与 SOA 的区别
+- 如何拆分服务
+- 微服务如何进行数据库管理
+- 如何应对微服务的链式调用异常
+- 对于快速追踪与定位问题
+- 微服务的安全
+
+### 分布式
+
+- 谈谈业务中使用分布式的场景
+- Session 分布式方案
+- 分布式锁的场景
+- 分布是锁的实现方案
+- 分布式事务
+- 集群与负载均衡的算法与实现
+- 说说分库与分表设计
+- 分库与分表带来的分布式困境与应对之策
+
+### 安全问题
+
+- 安全要素与 STRIDE 威胁
+- 防范常见的 Web 攻击
+- 服务端通信安全攻防
+- HTTPS 原理剖析
+- HTTPS 降级攻击
+- 授权与认证
+- 基于角色的访问控制
+- 基于数据的访问控制
+
+### 性能优化
+
+- 性能指标有哪些
+- 如何发现性能瓶颈
+- 性能调优的常见手段
+- 说说你在项目中如何进行性能调优
+
+## 工程篇
+
+### 需求分析
+
+- 你如何对需求原型进行理解和拆分
+- 说说你对功能性需求的理解
+- 说说你对非功能性需求的理解
+- 你针对产品提出哪些交互和改进意见
+- 你如何理解用户痛点
+
+### 设计能力
+
+- 说说你在项目中使用过的 UML 图
+- 你如何考虑组件化
+- 你如何考虑服务化
+- 你如何进行领域建模
+- 你如何划分领域边界
+- 说说你项目中的领域建模
+- 说说概要设计
+
+### 设计模式
+
+- 你项目中有使用哪些设计模式
+- 说说常用开源框架中设计模式使用分析
+- 说说你对设计原则的理解
+- 23种设计模式的设计理念
+- 设计模式之间的异同，例如策略模式与状态模式的区别
+- 设计模式之间的结合，例如策略模式+简单工厂模式的实践
+- 设计模式的性能，例如单例模式哪种性能更好。
+
+### 业务工程
+
+- 你系统中的前后端分离是如何做的
+- 说说你的开发流程
+- 你和团队是如何沟通的
+- 你如何进行代码评审
+- 说说你对技术与业务的理解
+- 说说你在项目中经常遇到的 Exception
+- 说说你在项目中遇到感觉最难Bug，怎么解决的
+- 说说你在项目中遇到印象最深困难，怎么解决的
+- 你觉得你们项目还有哪些不足的地方
+- 你是否遇到过 CPU 100% ，如何排查与解决
+- 你是否遇到过 内存 OOM ，如何排查与解决
+- 说说你对敏捷开发的实践
+- 说说你对开发运维的实践
+- 介绍下工作中的一个对自己最有价值的项目，以及在这个过程中的角色
+
+### 软实力
+
+- 说说你的亮点
+- 说说你最近在看什么书
+- 说说你觉得最有意义的技术书籍
+- 工作之余做什么事情
+- 说说个人发展方向方面的思考
+- 说说你认为的服务端开发工程师应该具备哪些能力
+- 说说你认为的架构师是什么样的，架构师主要做什么
+- 说说你所理解的技术专家
