@@ -71,7 +71,7 @@
 >
 > 这里我自定义了一个类, 利用相同的属性`new`了两个对象, 所以这里他们不是同一个对象, 所以为`fasle`
 >
-> 但是按照上面`String`的示例来说, 应该`k2`能够改变`k1`的值, 但是这里为什么失败了
+> 但是按照上面`String`的示例来说, 应该`k2`能够改变`k1`的值, 但是这里为什么失败了？因为没有重写`equals`和`hashCode`方法
 
 #### **代码四**
 
@@ -132,64 +132,6 @@
 
 **先放部分源码, 有兴趣的可以阅读put全部源码的可以去https://www.cnblogs.com/captainad/p/10905184.html**
 
-> ```java
-> public V put(K key, V value) {
->     return putVal(hash(key), key, value, false, true);
-> } 
-> 
-> //计算hash值
-> static final int hash(Object key) {
->     int h;
->     return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
-> }
-> 
-> final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
->                 boolean evict) {
->      Node<K,V>[] tab; Node<K,V> p; int n, i;
->      // 如果map还是空的，则先开始初始化，table是map中用于存放索引的表
->      if ((tab = table) == null || (n = tab.length) == 0) {
->          n = (tab = resize()).length;
->      }
->      // 使用hash与数组长度减一的值进行异或得到分散的数组下标，预示着按照计算现在的
->      // key会存放到这个位置上，如果这个位置上没有值，那么直接新建k-v节点存放
->      // 其中长度n是一个2的幂次数
->      if ((p = tab[i = (n - 1) & hash]) == null) {
->          tab[i] = newNode(hash, key, value, null);
->      }
-> 
->      // 如果走到else这一步，说明key索引到的数组位置上已经存在内容，即出现了碰撞
->      // 这个时候需要更为复杂处理碰撞的方式来处理，如链表和树
->      else {
->          Node<K,V> e; K k;
->          // 其中p已经在上面通过计算索引找到了，即发生碰撞那一个节点
->          // 比较，如果该节点的hash和当前的hash相等，而且key也相等或者
->          // 在key不等于null的情况下key的内容也相等，则说明两个key是
->          // 一样的，则将当前节点p用临时节点e保存
->          if (p.hash == hash &&
->                  ((k = p.key) == key || (key != null && key.equals(k)))) {
->              e = p;
->          }else if(){
->              //...省略
->          }else{
->              //...省略
->          }
-> 
->          // 此时的e是保存的被碰撞的那个节点，即老节点
->          if (e != null) { // existing mapping for key
->              V oldValue = e.value;
->              // onlyIfAbsent是方法的调用参数，表示是否替换已存在的值，
->              // 在默认的put方法中这个值是false，所以这里会用新值替换旧值
->              if (!onlyIfAbsent || oldValue == null)
->                  e.value = value;
->              // Callbacks to allow LinkedHashMap post-actions
->              afterNodeAccess(e);
->              return oldValue;
->          }
->      }
->      //...省略
->  }
-> ```
-
 也就是说`hashMap`在`put`的时候是
 
 1. 需要先计算`key`的`hash`值( `hash(key)` ), 
@@ -197,6 +139,66 @@
 3. 当地址上已经存在内容, 再利用`equals`比较对象的;
 
 自定义类在没有重写`hashCode`的方法时, 默认调用的是Object类的`equals()`和`hashCode()`, 
+
+> ```java
+> public V put(K key, V value) {
+> 
+>  return putVal(hash(key), key, value, false, true);
+> } 
+> 
+> //计算key的hash值
+> static final int hash(Object key) {
+>  int h;
+>  return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+> }
+> 
+> //int hash：key的hash值
+> final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+>              boolean evict) {
+>   Node<K,V>[] tab; Node<K,V> p; int n, i;
+>   // 如果map还是空的，则先开始初始化，table是map中用于存放索引的表
+>   if ((tab = table) == null || (n = tab.length) == 0) {
+>       n = (tab = resize()).length;
+>   }
+>   // 使用hash与数组长度减一的值进行异或得到分散的数组下标，预示着按照计算现在的
+>   // key会存放到这个位置上，如果这个位置上没有值，那么直接新建k-v节点存放
+>   // 其中长度n是一个2的幂次数
+>   if ((p = tab[i = (n - 1) & hash]) == null) {
+>       tab[i] = newNode(hash, key, value, null);
+>   }
+> 
+>   // 如果走到else这一步，说明key索引到的数组位置上已经存在内容，即出现了碰撞
+>   // 这个时候需要更为复杂处理碰撞的方式来处理，如链表和树
+>   else {
+>       Node<K,V> e; K k;
+>       // 其中p已经在上面通过计算索引找到了，即发生碰撞那一个节点
+>       // 比较，如果该节点的hash和当前的hash相等，而且key也相等或者
+>       // 在key不等于null的情况下key的内容也相等，则说明两个key是
+>       // 一样的，则将当前节点p用临时节点e保存
+>       if (p.hash == hash &&
+>               ((k = p.key) == key || (key != null && key.equals(k)))) {
+>           e = p;
+>       }else if(){
+>           //...省略
+>       }else{
+>           //...省略
+>       }
+> 
+>       // 此时的e是保存的被碰撞的那个节点，即老节点
+>       if (e != null) { // existing mapping for key
+>           V oldValue = e.value;
+>           // onlyIfAbsent是方法的调用参数，表示是否替换已存在的值，
+>           // 在默认的put方法中这个值是false，所以这里会用新值替换旧值
+>           if (!onlyIfAbsent || oldValue == null)
+>               e.value = value;
+>           // Callbacks to allow LinkedHashMap post-actions
+>           afterNodeAccess(e);
+>           return oldValue;
+>       }
+>   }
+>   //...省略
+> }
+> ```
 
 **`Object`中的`equals()`和`hashCode()`**
 
@@ -251,7 +253,7 @@ final Node<K,V> getNode(int hash, Object key) {
 
 当我们试图添加或者找到一个`key`的时候，方法会去判断哈希值是否相等和值是否相等，都相等的时候才会判断这个`key`就是要获取的`key`。也就是说，严格意义上，一个`HashMap`里是不允许出现相同的`key`的。
 
-当我们使用对象作为`key`的时候，根据原本的`hashCode`和`equals`仍然能保证`key`的唯一性。但是当我们重写了`equals`方法而不重写`hashCode()`方法时，可能出现值相等但是因为地址不相等导致哈希值不同，最后导致出现两个相同的`key`的情况。
+当我们使用对象作为`key`的时候，根据原本的`hashCode`和`equals`仍然能保证`key`的唯一性。但是当我们重写了`equals`方法而不重写`hashCode()`方法时，**可能出现值相等但是因为地址不相等导致哈希值不同，最后导致出现两个相同的`key`的情况**。（注：Java的HashCode的生成与对象的内存地址有关）
 
 ```java
 public class Test1 {
@@ -308,7 +310,7 @@ k1 == k2 : false
 
 >如果调用equals方法得到的结果为true，则两个对象的hashcode值必定相等；
 >
->如果equals方法得到的结果为false，则两个对象的hashcode值不一定不同；
+>如果equals方法得到的结果为false，则两个对象的hashcode值有可能不同；
 >
 >如果两个对象的hashcode值不等，则equals方法得到的结果必定为false；
 >

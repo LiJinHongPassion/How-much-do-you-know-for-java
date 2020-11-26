@@ -386,7 +386,7 @@ public @interface CherryAnnotation {
 
 
 
-#### 1.14.3 位运算
+#### 1.14.3 位运算（源码中有较多的位运算）
 
 下面的a和b都是整数类型，则：
 
@@ -399,6 +399,10 @@ public @interface CherryAnnotation {
 | 左移                                            | a shl b    | a << b | a << b |
 | 带符号[右移](https://baike.baidu.com/item/右移) | a shr b    | a >> b | a >> b |
 | 无符号右移                                      | /          | /      | a>>> b |
+
+### 1.15 Hash算法
+
+
 
 ---
 
