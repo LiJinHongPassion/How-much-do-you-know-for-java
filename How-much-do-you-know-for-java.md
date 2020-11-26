@@ -8,7 +8,7 @@
 >
 > v1.1 ：网络编程、MySQL锁、分布式中RPC和消息队列以及对其他章节进行小篇幅的扩张
 >
-> v1.2 ：整理收拾未完成的Java基础，IO编程
+> v1.2 ：整理收拾未完成的Java基础，IO编程，netty
 
 ---
 
@@ -268,7 +268,7 @@ public @interface CherryAnnotation {
 
 ### 1.11  new Object()到底占用几个字节
 
-> 参考文章 : https://juejin.im/post/6873691965892853767
+> 参考文章 :  https://juejin.cn/post/6844904113306615822 https://juejin.im/post/6873691965892853767
 
 <img src="img/20200814123800698.png" style="zoom:150%;" />
 
@@ -283,6 +283,44 @@ public @interface CherryAnnotation {
 > - 开启了指针压缩(默认是开启的)
 >    开启指针压缩后，Class Pointer会被压缩为4字节，最终大小为：
 >    **8(Mark Word)+4(Class Pointer)+4(对齐填充)=16字节**
+
+#### MarkWord
+
+![](img/171386fa82b17709)
+
+
+
+> 表格中的“场景”，你也可以理解为“状态”，一个对象在一个时间点是处于一种状态的，但是状态之间**可能会切换**.
+>
+> 也就是你使用的对象，就处于当前表格中，其中“一行”的状态.
+>
+> Mark Word在64位虚拟机下，也就是占用64位大小即8个字节的空间.
+>
+> 内具体容包括：
+>
+> - unused：未使用的
+> - hashcode：hashcode都是指identity hash code(*identity hash code是指**不经重写**过由jvm计算的hashcode.*)
+> - thread: 偏向锁记录的线程标识
+> - epoch: 验证偏向锁有效性的时间戳
+> - age：分代年龄
+> - biased_lock 偏向锁标志
+> - lock 锁标志
+> - pointer_to_lock_record 轻量锁lock record指针
+> - pointer_to_heavyweight_monitor 重量锁monitor指针
+>
+> 如果你看cms_free这个字体有点奇怪那就对了，开始误画成了`unused`，后来反应过来默认开启“**指针压缩**”的情况，那么那一个bit应该是`cms_free`.
+>
+> `cms_free`从名字就能看出和cms收集器有关系，因为cms算法是**标记-清理**的一款收集器，所以内存碎片问题是将不可达对象维护在一个列表**free list**中，此处应该是标记对象是否在**free list**中.
+
+> <font style="color: red">*为什么晋升到老年代的年龄设置(`XX:MaxTenuringThreshold`)不能超过**15** ？*</font>
+>
+> 因为就给了age**四个bit**空间，最大就是**1111**(二进制)也就是**15**，多了没地方存.
+>
+> <font style="color: red">*为什么你的**synchronized**锁住的对象，没有“传说中的”偏向锁优化？*</font>
+>
+> 因为hashcode并不是对象实例化完就计算好的，是调用计算出来放在mark word里的。
+>
+> 你调用过hashcode方法(或者隐式调用：存到hashset里，map的key，调用了默认未经重写的toString()方法等等)，把“坑位”占了，偏向锁想存的线程id没地方存了，自然就直接是**轻量级锁**了.
 
 ### 1.12 static 和 final
 
@@ -308,13 +346,13 @@ public @interface CherryAnnotation {
 >
 > 被final修饰各种所蕴含的特殊意义：
 >
-> > 1、 final 修饰基本类型：值不能被修改；
+> > 1、 final 修饰基本类型：值**不能被修改**；
 > >
-> > 2、final 修饰引用类型：引用不可以被修改也就是说不能指向其他对象，但是该引用的对象内容可以被修改； 
+> > **2、final 修饰引用类型：引用不可以被修改也就是说不能指向其他对象，但是该引用的对象内容可以被修改；** 
 > >
-> > 3、final 修饰 方法，方法不可以重写，但是可以被子类访问 【前提：方法不是 private 类型】。
+> > 3、final 修饰 方法，方法**不可以重写**，但是可以被子类访问 【前提：方法不是 private 类型】。
 > >
-> > 4、final 修饰 类，类不可以被继承。
+> > 4、final 修饰 类，类**不可以被继承**。
 
 **static fianl**
 
@@ -327,6 +365,40 @@ public @interface CherryAnnotation {
 > > 2、方法：属于类的方法且不可以被重写。 
 > >
 > > 3、内部类：属于外部类，且不能被继承
+
+### 1.13 OutOfMerroryError和StackOverFlowError
+
+> [OutOfMerroryError](https://juejin.cn/post/6844903615253987335)：堆中，无法再分配新的内存，内存耗尽，并且垃圾回收器无法及时回收内存，则抛出 OutOfMemoryError。（堆中主要存储的是对象）
+>
+> StackOverFlowError：调用栈过深，导致线程栈占用大小超过`-Xss`（或者是`-XX:ThreadStackSize`）的限制，如果没指定`-Xss`，则根据不同系统确定默认最大大小。该问题一般出现在递归的方法
+
+### 1.14 计算机基础（科普篇）
+
+#### 1.14.1 基本存储单位
+
+> **位（bit）：**二进制数中的一个数位，可以是0或者1，是计算机中数据的最小单位。
+>
+> **字节（Byte，B）：**计算机中数据的基本单位，每8位组成一个字节。各种信息在计算机中存储、处理至少需要一个字节。例如，一个ASCII码用一个字节表示，一个汉字用两个字节表示。
+
+#### 1.14.2 [原码](https://baike.baidu.com/item/原码/1097586)、[反码](https://baike.baidu.com/item/反码/769985)和补码（有符号数有三种表示方法）------
+
+
+
+
+
+#### 1.14.3 位运算
+
+下面的a和b都是整数类型，则：
+
+| 含义                                            | Pascal语言 | C语言  | Java   |
+| ----------------------------------------------- | ---------- | ------ | ------ |
+| 按位与                                          | a and b    | a & b  | a & b  |
+| [按位或](https://baike.baidu.com/item/按位或)   | a or b     | a \| b | a \| b |
+| 按位[异或](https://baike.baidu.com/item/异或)   | a xor b    | a ^ b  | a ^ b  |
+| 按位[取反](https://baike.baidu.com/item/取反)   | not a      | ~a     | ~a     |
+| 左移                                            | a shl b    | a << b | a << b |
+| 带符号[右移](https://baike.baidu.com/item/右移) | a shr b    | a >> b | a >> b |
+| 无符号右移                                      | /          | /      | a>>> b |
 
 ---
 
@@ -2755,7 +2827,7 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 >
 > ![](img/20190718154523875.png)
 
-### 5.3 IO----
+### 5.3 IO
 
 > liunx的io模型是5种,这里只对Java的3种io模型进行简单介绍
 >
@@ -2769,7 +2841,7 @@ initialValue方法的访问修饰符是protected，该方法为第一次调用ge
 
 ![image-20201120094731211](img/image-20201120094731211.png)
 
-**缺陷：**
+##### **缺陷**
 
 > 阻塞模型，**客户端的性能会影响阻塞时间**，当客户端的读写速度十分的缓慢，则阻塞时间越长
 >
@@ -2877,7 +2949,7 @@ Buffer reset();
 
 ##### Selectors
 
-> 选择器，用于注册各种channel感兴趣的事件, 共有4种感兴趣的事件： **OP_READ, OP_WRITE, OP_CONNECT, OP_ACCEPT**
+> 选择器，用于注册各种channel感兴趣的事件, 共有4种感兴趣的事件： **OP_READ, OP_WRITE, OP_CONNECT（连接已经建立）, OP_ACCEPT（有新的网络连接可以accept）**
 
 > - Selectors
 >
@@ -3038,6 +3110,13 @@ SelectionKey **#isAcceptable(), #isReadable(), #isWritable(), #isConnectable()**
 > }
 > ```
 
+##### NIO的缺陷
+
+> - NIO的类库和API繁杂，使用麻烦：需要熟练掌握Selector、ServerSocketChannel、SocketChannel、ByteBuffer等。
+> - 需要具备其他的额外技能：要熟悉Java多线程编程，因为 NIO编程涉及到Reactor模式，你必须对多线程和网络编程非常熟悉，才能编写出高质量的NIO程序。
+> - 开发工作量和难度都非常大：例如客户端面临断连重连、网络闪断、半包读写、失败缓存、网络拥塞和异常流的处理等等。
+> - <font style="color:red">JDKNIO的 Bug：例如臭名昭著的 Epoll Bug,它会导致Selector空轮询，最终导致CPU 100%。直到JDK 1.7版本该问题仍旧存在，没有被根本解决。</font>
+
 #### 5.3.3 BIO和NIO的区别
 
 > 1) BIO以流的方式处理数据,而NIO 以块的方式处理数据,块IO的效率比流IO高很多
@@ -3046,7 +3125,19 @@ SelectionKey **#isAcceptable(), #isReadable(), #isWritable(), #isConnectable()**
 >
 > 3)BIO基于字节流和字符流进行操作，而NIO 基于Channel(通道)和Buffer(缓冲区)进行操作，数据总是从通道读取到缓冲区中，或者从缓冲区写入到通道中。Selector(选择器)用于监听多个通道的事件（比如:连接请求，数据到达等），因此使用单个线程就可以监听多个客户端通道
 
-#### 5.3.4 异步非阻塞I/O(AIO/NIO2)
+#### 5.3.4 NIO与零拷贝
+
+> 参考文档：https://juejin.cn/post/6844903556345135118
+
+> 零拷贝主要的任务就是**避免**CPU将数据从一块存储拷贝到另外一块存储，主要就是利用各种零拷贝技术，避免让CPU做大量的数据拷贝任务，减少不必要的拷贝，或者让别的组件来做这一类简单的数据传输任务，让CPU解脱出来专注于别的任务。这样就可以让系统资源的利用更加有效。	
+>
+> 原始拷贝流程：
+>
+> ![](img/161364402166b76c)
+>
+> liunx的三种拷贝方式：mmap、sendfile、splice 主要是减去从内核（kernel space）到用户缓存（user space）的读写过程
+
+#### 5.3.5 异步非阻塞I/O(AIO/NIO2)
 
 JDK1.7正式发布。它的一个比较大的亮点就是将原来的NIO类库进行了升级，被称为NIO2.0。NIO2.0由JSR-203演进而来，它主要提供了如下三个方面的改进。
 
@@ -3055,11 +3146,37 @@ JDK1.7正式发布。它的一个比较大的亮点就是将原来的NIO类库�
 > - 提供AIO功能，支持基于文件的异步IO操作和针对网络套接字的异步操作;
 > - 完成JSR-51定义的通道功能，包括对配置和多播数据报的支持等。
 
-### 5.4 netty----
+### 5.4 netty
 
 > 初学理论参考：https://juejin.im/post/6844903703183360008（netty是什么）
 
-> Netty是 *一个异步事件驱动的网络应用程序框架，*用于快速开发可维护的高性能协议服务器和客户端。Netty是一个NIO客户端服务器框架，可以快速轻松地开发网络应用程序，例如协议服务器和客户端。它极大地简化了TCP和UDP套接字服务器等网络编程。
+> Netty是 *一个异步事件驱动的网络应用程序框架，*用于快速开发可维护的高性能协议服务器和客户端。Netty是一个**NIO客户端**服务器框架，可以快速轻松地开发网络应用程序，例如协议服务器和客户端。它极大地简化了TCP和UDP套接字服务器等网络编程。
+
+- 为什么选择 Netty
+
+##### 说说业务中，Netty 的使用场景
+
+> - 构建高性能、低时延的各种 Java 中间件，例如 MQ、分布式服务框架、ESB 消息总线等，Netty 主要作为基础通信框架提供高性能、低时延的通信服务；
+>
+> - 公有或者私有协议栈的基础通信框架，例如可以基于 Netty 构建异步、高性能的 WebSocket 协议栈；
+>
+> - 各领域应用，例如大数据、游戏等，Netty 作为高性能的通信框架用于内部各模块的数据分发、传输和汇总等，实现模块之间高性能通信。
+
+- 原生的 NIO 在 JDK 1.7 版本存在 epoll bug
+
+- 说说 Netty 的零拷贝
+
+- Netty 线程模型
+
+  ![](img/1500839-55f5b1d5ddc13581.jpg)
+
+- 什么是TCP 粘包/拆包
+
+- TCP粘包/拆包的解决办法
+
+- Netty 内部执行流程
+
+- Netty 重连实现
 
 ### 5.5 音视频通信----
 
@@ -3480,6 +3597,21 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 >
 >   我在这里介绍一下update的过程吧，首先会执行当前读，然后把返回的数据加锁，之后执行update。加锁是防止别的事务在这个时候对这条记录做什么，默认加的是排他锁，也就是你读都不可以，这样就可以保证数据不会出错了。但注意一点，就算你这里加了写锁，别的事务也还是能访问的，是不是很奇怪？数据库采取了一致性非锁定读，别的事务会去读取一个快照数据。
 >   innodb默认隔离级别是RR， 是通过MVVC来实现了，读方式有两种，执行select的时候是快照读，其余是当前读，所以，mvvc不能根本上解决幻读的情况
+
+**示例：对同一张银行卡同时转账, balx = 200**
+
+> | time |        T1         |        T2         |                                    |
+> | :--: | :---------------: | :---------------: | :--------------------------------: |
+> |  t1  |                   | begin_transaction |             T2开始事务             |
+> |  t2  |                   |    read(balx)     |             balx = 200             |
+> |  t3  |                   | balx = balx + 100 |             balx = 300             |
+> |  t4  | begin_transaction |    write(balx)    | balx = 300，t2,t3,t4是一个更新操作 |
+> |  t5  |    read(balx)     |        ...        |                                    |
+> |  t6  | balx = balx - 10  |     rollback      |                                    |
+> |  t7  |    write(balx)    |                   |                                    |
+> |  t8  |      commit       |                   |                                    |
+>
+> 
 
 ##### 7.4.2.3 为什么说 MVCC 和 Gap Lock 解决了 MySQL 的幻读问题
 
@@ -5165,13 +5297,9 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 > | 接收到Server端返回的结果                                     |                                                              |
 > | 调用方法                                                     |                                                              |
 
-##### 11.3.2.4 bio / nio / netty	---
-
 ##### 11.3.2.5 jdk动态代理 / cglib动态代理----
 
 ##### 11.3.2.6 心跳机制
-
-
 
 > 
 
