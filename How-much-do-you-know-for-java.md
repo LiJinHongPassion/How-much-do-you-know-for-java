@@ -6336,7 +6336,9 @@ public class QuickSort {
 - 迪米特法则（**L**aw **o**f **D**emeter，**LoD**）
 - 开闭原则（**O**pen **C**losed **P**rinciple，**OCP**）
 
-#### 15.2 模式
+#### 15.2 常用设计模式
+
+> https://juejin.cn/post/6844903600137863175
 
 ##### 15.2.1 单例模式
 
@@ -6344,8 +6346,22 @@ public class QuickSort {
 
 ###### 线程安全
 
-> 查看`3 多线程章节`中的`3.5 volatile`中的`示例 : 单例模式`板块
 
+
+- 懒汉模式（线程安全）
+
+
+
+- 饿汉模式
+
+
+
+- 枚举
+
+
+
+- 双重锁校验
+> 查看`3 多线程章节`中的`3.5 volatile`中的`示例 : 单例模式`板块
 > ```java
 > public class Single{
 >     private static volatile Single single = null;
@@ -6362,9 +6378,18 @@ public class QuickSort {
 > }
 > ```
 >
-> 
 
 ###### spring的单例模式
+
+
+
+##### 观察者模式
+
+##### 适配器模式
+
+##### 装饰者模式
+
+##### 工厂模式
 
 <div STYLE="page-break-after: always;"></div>
 
