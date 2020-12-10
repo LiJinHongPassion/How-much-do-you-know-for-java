@@ -4183,6 +4183,8 @@ binlog日志有三种格式，分别为STATMENT、ROW和MIXED。
 
 > 不要为了分库分表而去分库分表, MySQL的数据量达到千万级以后,他的性能就开始逐渐下降, 这时候我们可以考虑分库分表
 
+> 分表：单表数据量特别大的时候，可以分表或者归档历史数据
+
 ### 7.9 函数(了解)
 
 ### 7.10 存储过程(了解)
@@ -6350,15 +6352,60 @@ public class QuickSort {
 
 - 懒汉模式（线程安全）
 
+> ```java
+> public class Single{
+>     private Single single;
+>     private Single(){}
+>     public static Synchronized Single getInstance(){
+>         if(single == null){
+>             return new Single();
+>         }
+>         return single;
+>     }
+> }
+> ```
+>
+> 
 
+- 静态内部类
+
+> ```java
+> public class Singleton {    
+>     private static class SingletonHolder {     
+>         private static final Singleton INSTANCE = new Singleton();     
+>     }     
+>     private Singleton (){}     
+>     public static final Singleton getInstance() {     
+>         return SingletonHolder.INSTANCE;     
+>     } 
+> }
+> ```
+>
+> 
 
 - 饿汉模式
 
-
+> ```java
+> public class Singleton {     
+>     private static Singleton instance = new Singleton();     
+>     private Singleton (){}     
+>     public static Singleton getInstance() {     
+>         return instance;    
+>     }  
+> }
+> ```
 
 - 枚举
 
-
+> ```java
+> public enum Singleton {  
+>    INSTANCE;  
+>    public void whateverMethod() {  
+>    }  
+> }
+> ```
+>
+> 
 
 - 双重锁校验
 > 查看`3 多线程章节`中的`3.5 volatile`中的`示例 : 单例模式`板块
@@ -6369,7 +6416,7 @@ public class QuickSort {
 >         if (single == null){
 >             synchronized (single){
 >                 if (single == null){
->                     return new Single();
+>                     single = new Single();
 >                 }
 >             }
 >         }
