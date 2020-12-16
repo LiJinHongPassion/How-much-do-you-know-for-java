@@ -1,7 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5e486d8c-466e-4bdc-a45f-f5f2e8ceaa8c" name="Default Changelist" comment="" />
+    <list default="true" id="5e486d8c-466e-4bdc-a45f-f5f2e8ceaa8c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/观察者模式/Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/观察者模式/被观察者/XiaoMei.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/观察者模式/观察者/Impl/Person.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/观察者模式/观察者/LaoLi.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/观察者模式/观察者/LaoWang.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../How-much-do-you-know-for-java.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../How-much-do-you-know-for-java.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/META-INF/Design.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/abstractFactory/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Design/abstractFactory/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/one/APrint.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/one/BPrint.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/one/Factory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/one/IPrint.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/one/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/test.rar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/three/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/three/factory/AFactory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/three/factory/AbstractRestaurant.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/three/factory/BFactory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/three/factory/CFactory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/three/product/food/Bread.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/three/product/food/IFood.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/three/product/food/Meat.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/three/product/food/Milk.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/three/product/tool/Fork.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/three/product/tool/ITool.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/three/product/tool/Knife.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/three/product/tool/Spoon.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/two/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/two/factory/AFactory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/two/factory/BFactory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/two/factory/IFactory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/two/print/APrint.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/two/print/BPrint.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Design/test/two/print/IPrint.class" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -43,7 +78,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/abstractFactory" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -61,7 +96,7 @@
       <recent name="C:\Users\Administrator\Desktop\Design\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.Test">
     <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="test.one.Main" />
       <module name="Design" />
@@ -114,8 +149,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="观察者模式.Test" />
+      <module name="Design" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="观察者模式.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Test" />
         <item itemvalue="Application.Main (2)" />
         <item itemvalue="Application.Main (1)" />
         <item itemvalue="Application.Main" />
@@ -135,6 +184,7 @@
       <workItem from="1600129040780" duration="6100000" />
       <workItem from="1600218069534" duration="4014000" />
       <workItem from="1600304621772" duration="1733000" />
+      <workItem from="1607571639134" duration="7367000" />
     </task>
     <servers />
   </component>
@@ -142,10 +192,10 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="765" y="225" key="#com.intellij.ide.util.MemberChooser" timestamp="1600220750626">
+    <state x="765" y="225" key="#com.intellij.ide.util.MemberChooser" timestamp="1607571716447">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="765" y="225" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1600220750626" />
+    <state x="765" y="225" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1607571716447" />
     <state x="736" y="412" width="447" height="222" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1600129939166">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -154,22 +204,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="245" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1600156725623" />
-    <state width="1877" height="363" key="GridCell.Tab.0.bottom" timestamp="1600228583373">
+    <state width="1340" height="274" key="GridCell.Tab.0.bottom" timestamp="1607680627284">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="363" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1600228583373" />
-    <state width="1877" height="363" key="GridCell.Tab.0.center" timestamp="1600228583373">
+    <state width="1340" height="274" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1607680627284" />
+    <state width="1340" height="274" key="GridCell.Tab.0.center" timestamp="1607680627283">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="363" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1600228583373" />
-    <state width="1877" height="363" key="GridCell.Tab.0.left" timestamp="1600228583373">
+    <state width="1340" height="274" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1607680627283" />
+    <state width="1340" height="274" key="GridCell.Tab.0.left" timestamp="1607680627283">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="363" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1600228583373" />
-    <state width="1877" height="363" key="GridCell.Tab.0.right" timestamp="1600228583373">
+    <state width="1340" height="274" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1607680627283" />
+    <state width="1340" height="274" key="GridCell.Tab.0.right" timestamp="1607680627283">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="363" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1600228583373" />
+    <state width="1340" height="274" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1607680627283" />
     <state width="1877" height="363" key="GridCell.Tab.1.bottom" timestamp="1600228583373">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
