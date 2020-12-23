@@ -9,6 +9,8 @@
 > v1.1 ：网络编程、MySQL锁、分布式中RPC和消息队列以及对其他章节进行小篇幅的扩张
 >
 > v1.2 ：整理收拾未完成的Java基础，IO编程，netty，分布式事务初探，设计模式（单例，观察者）等
+>
+> v1.3 ：[主从复制、双向同步、环状同步](https://blog.csdn.net/rockyzhuo2014/article/details/82316619)---------
 
 ---
 
@@ -4193,6 +4195,8 @@ binlog日志有三种格式，分别为STATMENT、ROW和MIXED。
 ### 7.9 函数(了解)
 
 ### 7.10 存储过程(了解)
+
+#### 7.11 [主从复制、双向同步、环状同步](https://blog.csdn.net/rockyzhuo2014/article/details/82316619)---------
 
 ---
 
