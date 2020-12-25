@@ -2,17 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e486d8c-466e-4bdc-a45f-f5f2e8ceaa8c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/装饰者模式/Test.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/装饰者模式/产品/Battercake.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/装饰者模式/产品/抽象类/ABattercake.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/装饰者模式/产品装饰器/EggDecorator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/装饰者模式/产品装饰器/SausageDecorator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/装饰者模式/产品装饰器/抽象类/AbstractDecorator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/适配器模式/Test.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/适配器模式/目标/TypeC.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/适配器模式/适配器/CommonHeadsetAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/适配器模式/适配者/CommonHeadset.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/适配器模式/适配者/Headset.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../How-much-do-you-know-for-java.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../How-much-do-you-know-for-java.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -178,7 +167,7 @@
       <workItem from="1600218069534" duration="4014000" />
       <workItem from="1600304621772" duration="1733000" />
       <workItem from="1607571639134" duration="7367000" />
-      <workItem from="1608773373331" duration="9135000" />
+      <workItem from="1608773373331" duration="9758000" />
     </task>
     <servers />
   </component>
