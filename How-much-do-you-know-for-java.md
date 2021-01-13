@@ -914,9 +914,7 @@ public class Test {
 
 >阻塞式的解决方案：`synchronized`，`Lock`
 >
->非阻塞式的解决方案：原子变量
-
-> 利用原子类`AtomicInteger`
+>非阻塞式的解决方案：原子变量（利用原子类`AtomicInteger`，内部实现是CAS算法+自旋锁）
 
 ```java
 public class Test {
@@ -1020,18 +1018,18 @@ public class Test {
 
 ```java
 public class VisibilityTest {
-    public static int count = 0;
+    public /* volatile */ static int count = 0;
 
     public static void main(String[] args) {
         final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
 
         //读取count值的线程A
         new Thread(() -> {
-            System.out.println("开始读取count...");
+            System.out.println(Thread.currentThread().getName() + "-" + "开始读取count...");
             int i = count;//存放count的更新前的值
             while (count < 3) {
                 if (count != i) {//当count的值发生改变时，打印count被更新
-                    System.out.println(sdf.format(new Date()) + " count被更新为" + count);
+                    System.out.println(Thread.currentThread().getName() + "-" + sdf.format(new Date()) + " count被更新为" + count);
                     i = count;//存放count的更新前的值
                 }
             }
@@ -1046,18 +1044,16 @@ public class VisibilityTest {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println(sdf.format(new Date()) + " 赋值count为" + i);
+                System.out.println(Thread.currentThread().getName() + "-" + sdf.format(new Date()) + " 赋值count为" + i);
                 count = i;
-
             }
         }).start();
     }
 }
-//结果
-开始读取count...
-17:21:54.796 赋值count为1
-17:21:55.798 赋值count为2
-17:21:56.799 赋值count为3
+Thread-0-开始读取count...
+Thread-1-09:35:24.880 赋值count为1
+Thread-1-09:35:25.881 赋值count为2
+Thread-1-09:35:26.881 赋值count为3
 ```
 
 ##### 3.4.1.3 有序性
@@ -1272,9 +1268,86 @@ static boolean initFlag = false;
 >
 > **优势 : **`volatile`保证了变量的缓存可见性, 有序性, 但是不保证原子性, 所以这里添加 `synchronized`包装`single`的原子性, 并且在外层再添加了一个`if`
 
-### 3.6 信号量
+### 3.6 信号量Semaphore  、闭锁CountDownLatch  、  栅栏CyclicBarrier
 
-> Semaphore与CountDownLatch
+##### 3.6.1 信号量Semaphore
+
+> 转载：https://juejin.cn/post/6844903537508368398
+
+> **信号量：** 计数信号量用来控制同时访问某个特定资源的操作数量，或者同时执行某个指定操作的数量。信号量还可以用来实现某种资源池，或者对容器施加边界。
+>
+> > **Semaphore**管理着一组**许可（permit）**,许可的初始数量可以通过构造函数设定，操作时首先要获取到许可，才能进行操作，操作完成后需要释放许可。如果没有获取许可，则阻塞到有许可被释放。如果初始化了一个许可为`1`的**Semaphore**，那么就相当于一个不可重入的互斥锁
+>
+> > **常用方法：**
+> >
+> > |                                    方法 | 含义                                                         |
+> > | --------------------------------------: | :----------------------------------------------------------- |
+> > |                               acquire() | 获取一个令牌，在获取到令牌、或者被其他线程调用中断之前线程一直处于阻塞状态。 |
+> > |                    acquire(int permits) | 获取一个令牌，在获取到令牌、或者被其他线程调用中断、或超时之前线程一直处于阻塞状态。 |
+> > |                acquireUninterruptibly() | 获取一个令牌，在获取到令牌之前线程一直处于阻塞状态（忽略中断）。 |
+> > |                            tryAcquire() | 尝试获得令牌，返回获取令牌成功或失败，不阻塞线程。           |
+> > | tryAcquire(long timeout, TimeUnit unit) | 尝试获得令牌，在超时时间内循环尝试获取，直到尝试获取成功或超时返回，不阻塞线程。 |
+> > |                               release() | 释放一个令牌，唤醒一个获取令牌不成功的阻塞线程。             |
+> > |                      hasQueuedThreads() | 等待队列里是否还存在等待线程。                               |
+> > |                        getQueueLength() | 获取等待队列里阻塞的线程数。                                 |
+> > |                          drainPermits() | 清空令牌把可用令牌数置为0，返回清空令牌的数量。              |
+> > |                      availablePermits() | 返回可用的令牌数量。                                         |
+>
+> > **使用场景：**
+> >
+> > Semaphore是很好用的Java并发工具，除了上面这个例子，我们在工作中经常用它管理数据库连接或者保护其它受限资源的并发使用。当然Semaphore还有其它的一些方法，可以查看剩余的许可数，可以查看正在使用许可的线程数，具体使用时可以查看官方文档。
+
+**实例场景**
+
+> 其实假设生活中一个常见的场景：每天早上，大家都热衷于带薪上厕所，但是公司厕所一共只有`10`个坑位。。那么只能同时`10`个人用着，后面来的人都得等着（阻塞），如果走了`2`个人，那么又可以进去`2`个人。这里面就是**Semaphore**的应用场景，争夺有限的资源。
+
+> ```java
+> class Employee implements Runnable {
+>     private String id;
+>     private Semaphore semaphore;
+>     private static Random rand= new Random(47);
+> 
+>     public Employee(String id, Semaphore semaphore) {
+>         this.id = id;
+>         this.semaphore = semaphore;
+>     }
+> 
+>     public void run() {
+>             try {
+>                 semaphore.acquire();
+>                 System.out.println(this.id + "is using the toilet");
+>                 TimeUnit.MILLISECONDS.sleep(rand.nextInt(2000));
+>             } catch (InterruptedException e) {
+>             }finally{
+>                 semaphore.release();
+>                 System.out.println(this.id + "is leaving");
+>             }
+>     }
+> }
+> 
+> public class ToiletRace {
+>     private static final int THREAD_COUNT = 30;
+> 
+>     private static ExecutorService threadPool = Executors .newFixedThreadPool(THREAD_COUNT);
+> 
+>     private static Semaphore semaphore = new Semaphore(10);
+> 
+>     public static void main(String[] args) {
+>         for (int i = 0; i < THREAD_COUNT; i++) {
+>             threadPool.execute(new Employee(String.valueOf(i), semaphore));
+>         }
+>         threadPool.shutdown();
+>     }
+> }
+> ```
+
+##### 3.6.2 闭锁CountDownLatch
+
+> 转载：https://juejin.cn/post/6844903533368573966
+
+##### 3.6.3 栅栏CyclicBarrier
+
+> 转载：https://juejin.cn/post/6844903533368590350
 
 ### 3.7  Thread常见方法
 
@@ -1822,26 +1895,26 @@ public class ReentrantSpinLock {
 > static ReentrantLock lock = new ReentrantLock();
 > 
 > public static void main(String[] args) {
->     method1();
+>        method1();
 > }
 > 
 > public static void method1() {
->     lock.lock();
->     try {
->         log.debug("execute method1");
->         method2();
->     } finally {
->         lock.unlock();
->     }
+>        lock.lock();
+>        try {
+>            System.out.println("execute method1");
+>            method2();
+>        } finally {
+>            lock.unlock();
+>        }
 > }
 > 
 > public static void method2() {
->     lock.lock();
->     try {
->         log.debug("execute method2");
->     } finally {
->         lock.unlock();
->     }
+>        lock.lock();
+>        try {
+>            System.out.println("execute method2");
+>        } finally {
+>            lock.unlock();
+>        }
 > }
 > ```
 
@@ -1946,7 +2019,7 @@ public class ReentrantSpinLock {
 
 
 
-#### 3.16.3 ReentrantReadWriteLock
+#### 3.16.3 ReentrantReadWriteLock---
 
 
 
