@@ -4047,7 +4047,13 @@ binlog日志有三种格式，分别为STATMENT、ROW和MIXED。
 > ```
 >
 
+#### 关于 LOCATE vs LIKE vs INSTR 性能分析
 
+> 上结论： like 优于 locate 和 instr , instr 和 locate 十分接近。
+>
+> 测试数据：movieId有索引，tagId没有索引，数据量在14,863,000条
+>
+> ![image-20210113151306392](img/image-20210113151306392.png)![image-20210113151410494](img/image-20210113151410494.png)
 
 #### 千万级数据的排序
 
@@ -5418,6 +5424,10 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 ### 分布式事务
 
 > 参考文章 ; https://juejin.im/post/6844903734753886216 https://zhuanlan.zhihu.com/p/183753774
+>
+> 
+>
+> seate中文文档：http://seata.io/zh-cn/docs/overview/what-is-seata.html
 
 #### 两阶段提交（2PC）
 
@@ -5445,21 +5455,27 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 
 #### 三阶段提交（3PC）
 
-##### 准备阶段
+- 准备阶段
 
-##### 预提交阶段
+- 预提交阶段
 
-##### 提交阶段
+- 提交阶段
 
 
 
-#### 补偿事务（TCC）
+#### TCC事务（Try-Confirm-Cancel）
+
+- Try操作作为一阶段，负责资源的检查和预留。
+- Confirm操作作为二阶段提交操作，执行真正的业务。
+- Cancel是预留资源的取消。
+
+>  TCC事务的Try、Confirm、Cancel可以理解为SQL事务中的Lock、Commit、Rollback。
 
 #### 本地消息表（异步确保）
 
 #### MQ 事务消息
 
-#### 最大努力通知
+#### SAGA模式
 
 
 
@@ -6530,6 +6546,62 @@ public class QuickSort {
 ```
 
 ### 14.3 图
+
+> 图的基本概念：https://www.processon.com/view/5d4bcc35e4b0f4c23d6571eb#map
+
+> 图的存储方式：（**详细请看上面的链接**）
+>
+> - 邻接矩阵法（二维数组（称为邻接矩阵）存储图中的边或弧的信息）
+>
+>   > 数据结构
+>   >
+>   > ```java
+>   > /*
+>   > 这里首先定义一个vexs数组来存放各个顶点，然后建立arc以顶点数为行和列的行列式 
+>   > vexs数组也就是没有显示出来实际行列式的第0行和第0列
+>   > */
+>   > public class MGraph{
+>   > 	char vexs[MAXSIZE];//顶点表
+>   >     int arc[MAXSIZE][MAXSIZE];//领接矩阵可以看成边表
+>   >     int vexnum,arcnum ;  //定义顶点数字和边数
+>   > }
+>   > ```
+>   >
+>   > ![](img/5d4e9b88e4b0d78076f92223)
+>
+> - 邻接表法（一种数组与链表相结合的存储方法）
+>
+>   > 数据结构：
+>   >
+>   > ```java
+>   > /*
+>   > 下面代码的总体意思就是先定义边表我们给了他3个域分别是顶点域 权值域和next域
+>   > 在定义顶点表 他有两个域分别是顶点域和代表边表头结点的first_v域
+>   > 最后我们定义一个顶点表的顺序表类型。类似于图b中最左边的那个顺序表
+>   > 这样一个邻接表就定义好了
+>   > */
+>   > typedef int VertexType;/*顶点类型有用户定义*/
+>   > typedef struct EdgeNode//定义边表
+>   > {
+>   >     int adjvex;//邻接点域 里面放各个和顶点表对应节点有关的顶点
+>   >     int weight;//权值
+>   >     struct EdgeNode *next;
+>   > 
+>   > }EdgeNode;
+>   > typedef struct VertexNode /*定义顶点表*/
+>   > {
+>   >     VertexType data;//顶点域，存储顶点信息
+>   >      EdgeNode *first_v;//边表的头指针
+>   > }VertexNode;
+>   > typedef struct   //邻接表
+>   > {
+>   >    VertexNode adjlist[M]; //用于存放头结点和顶点的顺序表；
+>   >    int n_v,n_e;
+>   > 
+>   > }LinkdeGraph;
+>   > ```
+>   >
+>   > 
 
 #### 深度遍历和广度遍历
 
