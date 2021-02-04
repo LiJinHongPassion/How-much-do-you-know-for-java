@@ -6469,6 +6469,8 @@ public class QuickSort {
 <div STYLE="page-break-after: always;"></div>
 ## 14. 数据结构
 
+参考：https://gitee.com/IdeaHome_admin/java_data_structure/blob/master/DataStructer/src/%E4%BA%8C%E5%8F%89%E6%A0%91AVL%E6%A0%91%E7%9A%84%E5%AE%9E%E7%8E%B0/AVLTree.java
+
 ### 14.1 线性表
 
 #### 2020.09 牛客网高频笔试题
