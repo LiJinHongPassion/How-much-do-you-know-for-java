@@ -722,11 +722,11 @@ public @interface CherryAnnotation {
 
 #### 2.5.3 线程安全的list
 
-##### 2.5.3.1 Vector
+##### 2.5.3.1 Vector - **矢量队列，继承于AbstractList，实现了List, RandomAccess, Cloneable这些接口**
 
 > 数组实现的, 线程安全
 >
-> 利用的是`synchronized`加锁
+> 利用的是**`synchronized`**加锁
 >
 > ```java
 > public synchronized boolean add(E e) {
@@ -753,6 +753,8 @@ public @interface CherryAnnotation {
 ##### 2.5.3.2 CopyOnWriteArrayList
 
 > `java.util.concurrent`包下, `写入时复制`
+>
+> 线程安全，利用的是**`ReentrantLock`**
 
 **add方法**
 
