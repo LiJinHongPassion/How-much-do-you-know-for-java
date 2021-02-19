@@ -328,7 +328,7 @@ public @interface CherryAnnotation {
 
 **static**
 
-> 加载：static在类加载时初始化（加载）完成
+> 加载：static在**类加载**时初始化（加载）完成
 >
 > 含义：Static意为静态的，但凡被static 修饰说明属于类，不属于类的对象。
 >
@@ -428,12 +428,12 @@ public @interface CherryAnnotation {
 > WeakHashMap   一种其值无用武之地后可以被垃圾回收期回收的映射表
 > IdentityHashMap   一种用==而不是用equals比较键值的映射表
 
-### 2.1 HashMap
+### 2.1 HashMap - 线程不安全
 
 > **实现原理：** HashMap 基于 Hash 算法实现的，我们通过 put(key,value)存储，get(key)来获取。当传入 key 时，HashMap 会根据 key. hashCode() 计算出 hash 值，根据 hash 值将 value 保存在 bucket 里。当计算出的 hash 值相同时，我们称之为 hash 冲突，HashMap 的做法是用链表和红黑树存储相同 hash 值的 value。当 hash 冲突的个数比较少时，使用链表否则使用红黑树。 
 
 > **Java7：** 数组 + 链表
-> **Java8：** 数组 + 链表 + 红黑树 （链表中的元素超过了 8 个以后，会将链表转换为红黑树）
+> **Java8：** 数组 + 链表 + 红黑树 
 >
 > 	初始容量16，扩容*2
 > 	数据结构：数组+单向链表/红黑树
@@ -451,7 +451,7 @@ public @interface CherryAnnotation {
 
 > 参考文章 : 
 
-### 2.2 ConcurrentHashMap
+### 2.2 ConcurrentHashMap - 线程安全
 
 > **Java7：** **分段**数组 + 链表
 > **Java8：** 数组 + 链表 + 红黑树 （链表中的元素超过了 8 个以后，会将链表转换为红黑树）
@@ -700,7 +700,7 @@ public @interface CherryAnnotation {
 
 **扩容**
 
-> 1.5倍长度扩容, 利用Arrays.copyOf()来实现
+> list装满就扩容，1.5倍长度扩容, 利用Arrays.copyOf()来实现
 >
 > ```java
 > private void grow(int minCapacity) {
