@@ -5113,6 +5113,26 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 >
 > 最大堆( `-Xmx` )的大小和初始堆( `Xms` )大小为1024m, 设置的并发收集器( `CMS` ),  打印GC详细日志
 
+### 9.10 STW（stop the word）
+
+> 部分转载：https://www.cnblogs.com/williamjie/p/9222839.html
+
+> Java中Stop-The-World机制简称STW，是在执行垃圾收集算法时，[Java](http://www.jb51.net/list/list_207_1.htm)应用程序的其他所有线程都被挂起（除了垃圾收集帮助器之外）。Java中一种全局暂停现象，全局停顿，所有Java代码停止，native代码可以执行，但不能与JVM交互；这些现象多半是由于gc引起。
+>
+> GC时的Stop the World(STW)是大家最大的敌人。但可能很多人还不清楚，除了GC，JVM下还会发生停顿现象。
+>
+> JVM里有一条特殊的线程－－VM Threads，专门用来执行一些特殊的VM Operation，比如分派GC，thread dump等，这些任务，都需要整个Heap，以及所有线程的状态是静止的，一致的才能进行。所以JVM引入了安全点(Safe Point)的概念，想办法在需要进行VM Operation时，通知所有的线程进入一个静止的安全点。
+>
+> 除了GC，其他触发安全点的VM Operation包括：
+>
+> 1. JIT相关，比如Code deoptimization, Flushing code cache ；
+>
+> 2. Class redefinition (e.g. javaagent，AOP代码植入的产生的instrumentation) ；
+>
+> 3. Biased lock revocation 取消偏向锁 ；
+>
+> 4. Various debug operation (e.g. thread dump or deadlock check)；
+
 ---
 
 <div STYLE="page-break-after: always;"></div>
