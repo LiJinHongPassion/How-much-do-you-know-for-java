@@ -1,4 +1,12 @@
-<div style="font-size: 36px; text-align:center; margin-bottom:30px;">CodeAnt  --  Java知多少<dix>
+	
+				HTML
+				
+					
+				
+				
+						
+				
+			CodeAnt  --  Java知多少
 
 
 
@@ -41,6 +49,21 @@ a.equals(b);//b自动装箱
 
 a == b;//a自动拆箱
 ```
+**注意：当值 -128 <= 变量 <= 127，值是放在常量池里面**
+
+```java
+Integer i = 128;
+Integer j = 128;
+System.out.println(i == j); // false
+
+
+Integer i = 127;
+Integer j = 127;
+System.out.println(i == j); // true
+```
+
+
+
 ### 1.2  ==和equals
 
 > **==：**基本类型比较值、引用类型比较地址
@@ -3820,7 +3843,7 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 
 >
 >> 参考文章 : [innodb的锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locking.html)
->>
+>
 >> 下面列举了其中三种锁，详情看`7.4.3章节`
 >
 >> 1. record lock：记录锁，也就是仅仅锁着单独的一行
@@ -3829,58 +3852,59 @@ B+Tree是一种神奇的数据结构，如果用语言来讲可能会有点费�
 >
 >- 手动加锁的作用
 >
->  > 参考文章 : [查看innodb何种情况下使用何种锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locks-set.html)
+> > 参考文章 : [查看innodb何种情况下使用何种锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locks-set.html)
 >
->  > ```txt
->  > For `SELECT ... FOR UPDATE` or `SELECT ... LOCK IN SHARE MODE`, locks are acquired for scanned rows, and expected to be released for rows that do not qualify for inclusion in the result set (for example, if they do not meet the criteria given in the `WHERE` clause). However, in some cases, rows might not be unlocked immediately because the relationship between a result row and its original source is lost during query execution. For example, in a `UNION`, scanned (and locked) rows from a table might be inserted into a temporary table before evaluation whether they qualify for the result set. In this circumstance, the relationship of the rows in the temporary table to the rows in the original table is lost and the latter rows are not unlocked until the end of query execution.
->  > ```
->  >
->  > 对于[`SELECT ... FOR UPDATE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)或 [`SELECT ... LOCK IN SHARE MODE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)，将为扫描的行获取锁，并预期将释放不符合包含在结果集中的行（例如，如果它们不符合该`WHERE`子句中给出的条件）。但是，在某些情况下，行可能不会立即解锁，因为结果行与其原始源之间的关系在查询执行期间会丢失。例如，在 [`UNION`](https://dev.mysql.com/doc/refman/5.7/en/union.html)，从表中扫描（并锁定）的行可能会在评估它们是否符合结果集之前插入到临时表中。在这种情况下，临时表中的行与原始表中的行之间的关系将丢失，并且直到查询执行结束后，后行才被解锁。
+> > ```txt
+> > For `SELECT ... FOR UPDATE` or `SELECT ... LOCK IN SHARE MODE`, locks are acquired for scanned rows, and expected to be released for rows that do not qualify for inclusion in the result set (for example, if they do not meet the criteria given in the `WHERE` clause). However, in some cases, rows might not be unlocked immediately because the relationship between a result row and its original source is lost during query execution. For example, in a `UNION`, scanned (and locked) rows from a table might be inserted into a temporary table before evaluation whether they qualify for the result set. In this circumstance, the relationship of the rows in the temporary table to the rows in the original table is lost and the latter rows are not unlocked until the end of query execution.
+> > ```
+> >
+> > 对于[`SELECT ... FOR UPDATE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)或 [`SELECT ... LOCK IN SHARE MODE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)，将为扫描的行获取锁，并预期将释放不符合包含在结果集中的行（例如，如果它们不符合该`WHERE`子句中给出的条件）。但是，在某些情况下，行可能不会立即解锁，因为结果行与其原始源之间的关系在查询执行期间会丢失。例如，在 [`UNION`](https://dev.mysql.com/doc/refman/5.7/en/union.html)，从表中扫描（并锁定）的行可能会在评估它们是否符合结果集之前插入到临时表中。在这种情况下，临时表中的行与原始表中的行之间的关系将丢失，并且直到查询执行结束后，后行才被解锁。
 >
->  > ```txt
->  > `SELECT ... LOCK IN SHARE MODE` sets shared next-key locks on all index records the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
->  > ```
->  >
->  > [`SELECT ... LOCK IN SHARE MODE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)在搜索遇到的所有索引记录上设置共享的`next-key locks`。但是，对于使用唯一索引锁定行以搜索唯一行的语句，仅需要`index record lock`。
->  > ```txt
->  > `SELECT ... FOR UPDATE` sets an exclusive next-key lock on every record the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
->  > 
->  > For index records the search encounters, `SELECT ... FOR UPDATE` blocks other sessions from doing `SELECT ... LOCK IN SHARE MODE` or from reading in certain transaction isolation levels. Consistent reads ignore any locks set on the records that exist in the read view.
->  > ```
->  >
->  > [`SELECT ... FOR UPDATE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)在搜索遇到的每条记录上设置排他的`next-key lock`。但是，对于使用唯一索引锁定行以搜索唯一行的语句，仅需要`index record lock`。
->  >
->  > 对于搜索遇到的索引记录， [`SELECT ... FOR UPDATE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)阻止其他会话执行 [`SELECT ... LOCK IN SHARE MODE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)或读取某些事务隔离级别。一致的读取将忽略读取视图中存在的记录上设置的任何锁定。
+> > ```txt
+> > `SELECT ... LOCK IN SHARE MODE` sets shared next-key locks on all index records the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
+> > ```
+> >
+> > [`SELECT ... LOCK IN SHARE MODE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)在搜索遇到的所有索引记录上设置共享的`next-key locks`。但是，对于使用唯一索引锁定行以搜索唯一行的语句，仅需要`index record lock`。
+> >
+> > ```txt
+> > `SELECT ... FOR UPDATE` sets an exclusive next-key lock on every record the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
+> > 
+> > For index records the search encounters, `SELECT ... FOR UPDATE` blocks other sessions from doing `SELECT ... LOCK IN SHARE MODE` or from reading in certain transaction isolation levels. Consistent reads ignore any locks set on the records that exist in the read view.
+> > ```
+> >
+> > [`SELECT ... FOR UPDATE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)在搜索遇到的每条记录上设置排他的`next-key lock`。但是，对于使用唯一索引锁定行以搜索唯一行的语句，仅需要`index record lock`。
+> >
+> > 对于搜索遇到的索引记录， [`SELECT ... FOR UPDATE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)阻止其他会话执行 [`SELECT ... LOCK IN SHARE MODE`](https://dev.mysql.com/doc/refman/5.7/en/select.html)或读取某些事务隔离级别。一致的读取将忽略读取视图中存在的记录上设置的任何锁定。
 >
 >
 >- `CRUD`会加什么锁 ?
 >
-> > 参考文章 : [查看innodb何种情况下使用何种锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locks-set.html)
+>> 参考文章 : [查看innodb何种情况下使用何种锁](https://dev.mysql.com/doc/refman/5.7/en/innodb-locks-set.html)
 >
-> > ```txt
->  > SELECT ... FROM is a consistent read, reading a snapshot of the database and setting no locks unless the transaction isolation level is set to SERIALIZABLE. For SERIALIZABLE level, the search sets shared next-key locks on the index records it encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
->  > ```
+>> ```txt
+> > SELECT ... FROM is a consistent read, reading a snapshot of the database and setting no locks unless the transaction isolation level is set to SERIALIZABLE. For SERIALIZABLE level, the search sets shared next-key locks on the index records it encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
+> > ```
 >><font color="green">[`SELECT ... FROM`](https://dev.mysql.com/doc/refman/5.7/en/select.html)是一致的读取，读取数据库的快照并且不设置锁定，除非将事务隔离级别设置为 [`SERIALIZABLE`](https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html#isolevel_serializable)。</font><font color="red">对于 [`SERIALIZABLE`](https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html#isolevel_serializable)级别，搜索会在遇到的索引记录上设置共享的`next-key locks`。但是，对于使用`唯一索引`搜索到的唯一一行记录，仅需要`index record lock`。</font>
 >
->  > ```txt
->  > UPDATE ... WHERE ... sets an exclusive next-key lock on every record the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
->  > ```
->>
->  > <font color="red">[`UPDATE ... WHERE ...`](https://dev.mysql.com/doc/refman/5.7/en/update.html)在搜索遇到的每条记录上设置排他的`next-key lock`。但是，对于使用`唯一索引`搜索到的唯一一行记录，仅需要`index record lock`。</font>
+> > ```txt
+> > UPDATE ... WHERE ... sets an exclusive next-key lock on every record the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
+> > ```
 >
->  > ```txt
->  > DELETE FROM ... WHERE ... sets an exclusive next-key lock on every record the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
->  > ```
->>
->  > <font color="red">[`DELETE FROM ... WHERE ...`](https://dev.mysql.com/doc/refman/5.7/en/delete.html)在搜索遇到的每条记录上设置排他的`next-key lock`。但是，对于使用`唯一索引`搜索到的唯一一行记录，仅需要`index record lock`。</font>
+> > <font color="red">[`UPDATE ... WHERE ...`](https://dev.mysql.com/doc/refman/5.7/en/update.html)在搜索遇到的每条记录上设置排他的`next-key lock`。但是，对于使用`唯一索引`搜索到的唯一一行记录，仅需要`index record lock`。</font>
 >
->  > ```txt
->  > INSERT sets an exclusive lock on the inserted row. This lock is an index-record lock, not a next-key lock (that is, there is no gap lock) and does not prevent other sessions from inserting into the gap before the inserted row.
->  > ```
->  >
->  > <font color="blue">[`INSERT`](https://dev.mysql.com/doc/refman/5.7/en/insert.html)在插入的行上设置排他锁。该锁是`index record lock`，不是`next-key lock`（即没有`gap lock`），并且不会阻止其他会话插入到插入行之前的间隙中。</font>
->  >
->  > 在插入行之前，设置了一种称为插入意图间隙锁的间隙锁。此锁以这种方式发出信号，表明要插入的意图是：如果多个事务未插入间隙中的相同位置，则不必等待彼此插入的多个事务。假设有索引记录，其值分别为4和7。分别尝试插入5和6的值的每个事务在获得插入行的排他锁之前，都使用插入意图锁来锁定4和7之间的间隙，但是没有彼此阻塞，因为行没有冲突。
+> > ```txt
+> > DELETE FROM ... WHERE ... sets an exclusive next-key lock on every record the search encounters. However, only an index record lock is required for statements that lock rows using a unique index to search for a unique row.
+> > ```
+>
+> > <font color="red">[`DELETE FROM ... WHERE ...`](https://dev.mysql.com/doc/refman/5.7/en/delete.html)在搜索遇到的每条记录上设置排他的`next-key lock`。但是，对于使用`唯一索引`搜索到的唯一一行记录，仅需要`index record lock`。</font>
+>
+> > ```txt
+> > INSERT sets an exclusive lock on the inserted row. This lock is an index-record lock, not a next-key lock (that is, there is no gap lock) and does not prevent other sessions from inserting into the gap before the inserted row.
+> > ```
+> >
+> > <font color="blue">[`INSERT`](https://dev.mysql.com/doc/refman/5.7/en/insert.html)在插入的行上设置排他锁。该锁是`index record lock`，不是`next-key lock`（即没有`gap lock`），并且不会阻止其他会话插入到插入行之前的间隙中。</font>
+> >
+> > 在插入行之前，设置了一种称为插入意图间隙锁的间隙锁。此锁以这种方式发出信号，表明要插入的意图是：如果多个事务未插入间隙中的相同位置，则不必等待彼此插入的多个事务。假设有索引记录，其值分别为4和7。分别尝试插入5和6的值的每个事务在获得插入行的排他锁之前，都使用插入意图锁来锁定4和7之间的间隙，但是没有彼此阻塞，因为行没有冲突。
 
 
 ##### `MySQL`的死锁是什么样子 ? 
@@ -4501,7 +4525,11 @@ Redis默认每隔100ms随机抽取一些设置了过期时间的key，检查是�
 
 > 参考文章 : https://juejin.im/post/6844903966061363207#heading-1
 
+### 8.10 分布式锁 算法- redLock
 
+
+
+### 8.11 zset的底层 - 跳跃表
 
 ---
 
@@ -4770,6 +4798,8 @@ null
 > ![](img/165701207_1586336189484_802A6FE5D8D89EC50285B88F46C488F4)
 
 ### 9.7垃圾回收算法和垃圾收集器
+
+> https://juejin.cn/post/6844903694375321608#heading-29
 
 #### 9.7.1 标记-清除（ CMS 收集器 ）
 
@@ -5054,6 +5084,14 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 > 将内存分为一块较大的Eden空间和两块较小的Survivor空间。**空间大小比例为 默认伊甸园：幸存0：幸存1 = 8：1：1**，每次使用eden和其中一块survivor空间，当回收时候，将还存活着的对象一次性地拷贝到另一块survivor空间，随后清理掉eden和刚才用过的survivor空间。 
 >
 > 如果年轻代选择CMS收集器, 则经过6次young gc后还存活的对象,移入老年代。因为CMS默认的是6次
+>
+> HotSpot JVM把年轻代分为了三部分：1个Eden区和2个Survivor区（分别叫from和to）。默认比例为8：1,为啥默认会是这个比例，接下来我们会聊到。一般情况下，新创建的对象都会被分配到Eden区(一些大对象特殊处理),这些对象经过第一次Minor GC后，如果仍然存活，将会被移到Survivor区。对象在Survivor区中每熬过一次Minor GC，年龄就会增加1岁，当它的年龄增加到一定程度时，就会被移动到年老代中。
+>
+> 因为年轻代中的对象基本都是朝生夕死的(80%以上)，所以在年轻代的垃圾回收[算法](http://lib.csdn.net/base/datastructure)使用的是复制算法，复制算法的基本思想就是将内存分为两块，每次只用其中一块，当这一块内存用完，就将还活着的对象复制到另外一块上面。复制算法不会产生内存碎片。
+>
+> 在GC开始的时候，对象只会存在于Eden区和名为“From”的Survivor区，Survivor区“To”是空的。紧接着进行GC，Eden区中所有存活的对象都会被复制到“To”，而在“From”区中，仍存活的对象会根据他们的年龄值来决定去向。年龄达到一定值(年龄阈值，可以通过-XX:MaxTenuringThreshold来设置)的对象会被移动到年老代中，没有达到阈值的对象会被复制到“To”区域。经过这次GC后，Eden区和From区已经被清空。这个时候，“From”和“To”会交换他们的角色，也就是新的“To”就是上次GC前的“From”，新的“From”就是上次GC前的“To”。不管怎样，都会保证名为To的Survivor区域是空的。Minor GC会一直重复这样的过程，直到“To”区被填满，“To”区被填满之后，会将所有对象移动到年老代中。
+>
+> [![young_gc](img/young_gc.png)](http://ifeve.com/wp-content/uploads/2014/07/young_gc.png)
 
 ---
 ### 9.8 内存泄漏
@@ -5113,6 +5151,20 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 >
 > 最大堆( `-Xmx` )的大小和初始堆( `Xms` )大小为1024m, 设置的并发收集器( `CMS` ),  打印GC详细日志
 
+**某公司测试服上JVM启动参数**
+
+> /usr/java/default/bin/java 
+> -Djava.util.logging.config.file=/app/tomcat/tomcat9-api-applet-20101/conf/logging.properties 
+> -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager 
+> -server -Djava.awt.headless=true 
+> **-Xms1g -Xmx3g -XX:NewRatio=4 -XX:SurvivorRatio=5 -XX:PermSize=128m -XX:MaxPermSize=256m -Xss256k -XX:+UseConcMarkSweepGC** 
+> **-XX:ParallelGCThreads=16 -XX:+PrintGCDetails** 
+> -Ddruid.registerToSysProperty=true -Djdk.tls.ephemeralDHKeySize=2048 -Djava.protocol.handler.pkgs=org.apache.catalina.webresources 
+> -Dorg.apache.catalina.security.SecurityListener.UMASK=0027 -Dignore.endorsed.dirs= -classpath /app/tomcat/tomcat9-api-applet-20101/bin/bootstrap.jar:/app/tomcat/tomcat9-api-applet-20101/bin/tomcat-juli.jar 
+> -Dcatalina.base=/app/tomcat/tomcat9-api-applet-20101 
+> -Dcatalina.home=/app/tomcat/tomcat9-api-applet-20101 
+> -Djava.io.tmpdir=/app/tomcat/tomcat9-api-applet-20101/temp org.apache.catalina.startup.Bootstrap start
+
 ### 9.10 STW（stop the word）
 
 > 部分转载：https://www.cnblogs.com/williamjie/p/9222839.html
@@ -5126,12 +5178,17 @@ G1执行时使用4个worker并发执行，在初始标记时，还是会触发ST
 > 除了GC，其他触发安全点的VM Operation包括：
 >
 > 1. JIT相关，比如Code deoptimization, Flushing code cache ；
->
-> 2. Class redefinition (e.g. javaagent，AOP代码植入的产生的instrumentation) ；
->
+>2. Class redefinition (e.g. javaagent，AOP代码植入的产生的instrumentation) ；
 > 3. Biased lock revocation 取消偏向锁 ；
+>4. Various debug operation (e.g. thread dump or deadlock check)；
+
+### 9.11 GC日志分析
+
+> 参考：https://blog.csdn.net/weixin_43931625/article/details/105031002
 >
-> 4. Various debug operation (e.g. thread dump or deadlock check)；
+> 附件：[测试的gc.log](./附件/jvm/gc.log)
+>
+> GC线上分析网址：https://gceasy.io/
 
 ---
 
