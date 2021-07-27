@@ -5090,6 +5090,8 @@ S0/S1的功能由G1中的Survivor region来承载,通过GC日志可以观察到�
 红色标识的为G1中的四种region,都处于Heap中.
 G1执行时使用4个worker并发执行，在初始标记时，还是会触发STW,如第一步所示的Pause
 
+> 理解G1日志：https://blogs.oracle.com/poonam/understanding-g1-gc-logs
+
 ### 9.4 新生代怎么到老年代
 
 > 将内存分为一块较大的Eden空间和两块较小的Survivor空间。**空间大小比例为 默认伊甸园：幸存0：幸存1 = 8：1：1**，每次使用eden和其中一块survivor空间，当回收时候，将还存活着的对象一次性地拷贝到另一块survivor空间，随后清理掉eden和刚才用过的survivor空间。 
