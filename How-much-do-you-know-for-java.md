@@ -7,7 +7,7 @@
 ​				
 ​						
 ​				
-			CodeAnt  --  Java知多少
+​			CodeAnt  --  Java知多少
 
 
 
@@ -6991,6 +6991,20 @@ public class QuickSort {
 
 #### JDBC连接池源码
 
+## 附件
+
+#### REST API规范
+
+> https://github.com/godruoyi/restful-api-specification
+
+#### Java设计模式
+
+> https://github.com/iluwatar/java-design-patterns
+
+
+
+
+
 ## 疑难杂症
 
 #### 超大文件导入数据库（非直接导入数据库）
@@ -7250,3 +7264,4 @@ public class QuickSort {
 - 说说你认为的服务端开发工程师应该具备哪些能力
 - 说说你认为的架构师是什么样的，架构师主要做什么
 - 说说你所理解的技术专家
+
